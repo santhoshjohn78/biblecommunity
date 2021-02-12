@@ -1,9 +1,8 @@
 package com.ehss.bible.alpha.services;
 
 import com.ehss.bible.alpha.pojo.RootTOC;
-import com.ehss.bible.alpha.pojo.epub.Anchor;
-import com.ehss.bible.alpha.pojo.epub.ChapterHtml;
-import com.ehss.bible.alpha.pojo.epub.NavPoint;
+import com.ehss.bible.alpha.pojo.elasticsearch.BibleVerse;
+import com.ehss.bible.alpha.pojo.epub.*;
 import com.ehss.bible.alpha.pojo.toc.Book;
 import com.ehss.bible.alpha.pojo.toc.Section;
 import com.ehss.bible.alpha.pojo.toc.VirtualTOC;
@@ -41,6 +40,7 @@ public class TOCAdapterService {
                 section.setId(anchor.getValue());
                 section.setUrl(anchor.getHref());
                 section.setTitle(anchor.getValue());
+                section.setSectionTotal(chapterHtml.getBody().getPages().size());
                 sectionList.add(section);
 
             }
@@ -53,5 +53,41 @@ public class TOCAdapterService {
 
         return vtoc;
     }
+
+    /**
+     *
+     * @param section
+     * @return
+     */
+
+    public List<BibleVerse> toBibleVerseList(String bookName,String bookId,Section section) throws Exception {
+        List<BibleVerse> bibleVerseList = new ArrayList<>();
+
+        String pageurl = section.getUrl();
+        PageHtml pageHtml = this.epubTOCService.getPage(pageurl);
+        for (Paragraph paragraph:pageHtml.getBody().getParagraphs()) {
+            for (Span span:paragraph.getSpans()){
+                BibleVerse bibleVerse = new BibleVerse();
+                bibleVerse.setPageUrl(pageurl);
+                bibleVerse.setBookName(bookName);
+                bibleVerse.setBookId(bookId);
+                bibleVerse.setChapterName(section.getTitle());
+                bibleVerse.setChapterNumber(Integer.parseInt(section.getId()));
+                bibleVerse.setBibleVersionId("asv");
+                bibleVerse.setBibleVersionName("American Standard Version");
+                String key = bookName+"_"+section.getTitle()+"_"+span.getValue();
+                bibleVerse.setKey(key);
+                bibleVerse.setAnchorId(span.getId());
+                bibleVerse.setVerseNumber(Integer.parseInt(span.getValue()));
+                bibleVerse.setVerseText(span.getVerseText());
+                bibleVerseList.add(bibleVerse);
+
+            }
+        }
+
+        return bibleVerseList;
+    }
+
+
 
 }

@@ -3,6 +3,8 @@ package com.ehss.bible.alpha.api.controller;
 
 import com.ehss.bible.alpha.pojo.RootTOC;
 import com.ehss.bible.alpha.pojo.epub.ChapterHtml;
+import com.ehss.bible.alpha.pojo.epub.PageHtml;
+import com.ehss.bible.alpha.pojo.toc.PageUrl;
 import com.ehss.bible.alpha.services.EpubTOCService;
 import com.ehss.bible.alpha.services.VirtualTOCService;
 import lombok.extern.slf4j.Slf4j;
@@ -27,23 +29,35 @@ public class TocController {
         this.epubTocService = epubTocService;
     }
 
-
-    @GetMapping(path="/virtual",produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(path="pageurl/version/{versionId}/book/{bookId}/chapter/{chapterId}",produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public ResponseEntity<RootTOC> getVitrualToc() throws Exception{
-        return new ResponseEntity(virtualTOCService.constructVirtualTOC(), HttpStatus.OK);
+    public ResponseEntity<PageUrl> getPageUrl(@PathVariable String versionId,@PathVariable String bookId, @PathVariable String chapterId) throws Exception{
+        return new ResponseEntity(virtualTOCService.getPageUrlByBookAndChapter(versionId,bookId,chapterId),HttpStatus.OK);
     }
 
-    @GetMapping(path="/epub",produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(path="/virtual/version/{versionId}",produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public ResponseEntity<RootTOC> getEpubToc() throws Exception{
-        return new ResponseEntity(epubTocService.getToc(), HttpStatus.OK);
+    public ResponseEntity<RootTOC> getVitrualToc(@PathVariable String versionId) throws Exception{
+        return new ResponseEntity(virtualTOCService.constructVirtualTOC(versionId), HttpStatus.OK);
+    }
+
+    @GetMapping(path="/epub/version/{versionId}",produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public ResponseEntity<RootTOC> getEpubToc(@PathVariable String versionId) throws Exception{
+        return new ResponseEntity(epubTocService.getToc(versionId), HttpStatus.OK);
     }
 
     @GetMapping(path = "/epub/chapter/{chapterName}", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public ResponseEntity<ChapterHtml> getEpubChapterToc(@PathVariable String chapterName) throws Exception{
         return new ResponseEntity(epubTocService.getChapterToc(chapterName), HttpStatus.OK);
+    }
+
+
+    @GetMapping(path = "/epub/page/{pageUrl}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public ResponseEntity<PageHtml> getPageHtml(@PathVariable String pageUrl) throws Exception{
+        return new ResponseEntity(epubTocService.getPage(pageUrl), HttpStatus.OK);
     }
 
 }

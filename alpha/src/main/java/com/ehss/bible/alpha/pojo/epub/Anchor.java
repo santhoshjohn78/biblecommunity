@@ -13,6 +13,8 @@ import lombok.Setter;
 @AllArgsConstructor
 public class Anchor {
     @JacksonXmlProperty(isAttribute = true)
+    String id;
+    @JacksonXmlProperty(isAttribute = true)
     String href;
 
     @JacksonXmlText

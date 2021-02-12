@@ -15,6 +15,7 @@ public class Section {
     String id;
     String title;
     String url;
+    Integer sectionTotal;
 
-    List<Verse> verseList;
+
 }

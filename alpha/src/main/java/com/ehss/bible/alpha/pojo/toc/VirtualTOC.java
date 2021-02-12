@@ -13,5 +13,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class VirtualTOC {
+    String versionId;
+    String versionName;
     List<Book> bookList;
 }

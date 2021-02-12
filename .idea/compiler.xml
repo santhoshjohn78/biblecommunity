@@ -6,11 +6,18 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="biblecommunity" />
+        <module name="alpha" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
-      <module name="biblecommunity" target="1.5" />
+      <module name="alpha" target="11" />
+      <module name="biblecommunity" target="11" />
     </bytecodeTargetLevel>
+  </component>
+  <component name="JavacSettings">
+    <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="alpha" options="-parameters" />
+      <module name="biblecommunity" options="" />
+    </option>
   </component>
 </project>
