@@ -11,7 +11,7 @@ class App extends React.Component{
 
   constructor(props){
     super(props);
-    this.state = {showTOC:true};
+    
   }
 
   handleOnTOCClick = () => {
@@ -20,10 +20,10 @@ class App extends React.Component{
 
   render() {
     return <div>
-        <Header name="The Book">
-          <ToolBarComponent id="toc" name="Table Of Contents" icon="book icon" onclickhandler={this.handleOnTOCClick}>
+        <Header name="">
+          {/* <ToolBarComponent id="toc" name="Table Of Contents" icon="book icon" onclickhandler={this.handleOnTOCClick}>
           </ToolBarComponent>
-        
+         */}
           {/* <ToolBarComponent id="bkmk" name="bookmark" icon="bookmark icon" onclickhandler={this.handleOnTOCClick}>
 
           </ToolBarComponent> */}

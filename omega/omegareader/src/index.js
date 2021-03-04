@@ -5,13 +5,19 @@ import ReactDOM from 'react-dom';
 import './App.scss';
 import 'bootstrap/dist/css/bootstrap.css';
 import 'react-bootstrap-range-slider/dist/react-bootstrap-range-slider.css';
+import 'video-react/dist/video-react.css';
 import App from './App';
+import rootReducer from './reducers'
 import reportWebVitals from './reportWebVitals';
+import { createStore } from 'redux';
+import {Provider} from 'react-redux';
+
+const store = createStore(rootReducer,window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__());
 
 ReactDOM.render(
-  <React.StrictMode>
+  <Provider store={store}>
     <App />
-  </React.StrictMode>,
+    </Provider> ,
   document.getElementById('root')
 );
 

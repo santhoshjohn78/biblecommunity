@@ -2,41 +2,38 @@ import React, {useState} from 'react';
 import Navbar from 'react-bootstrap/Navbar';
 import Nav from 'react-bootstrap/Nav';
 import Button from 'react-bootstrap/Button';
-import Form from 'react-bootstrap/Form';
-import FormControl from 'react-bootstrap/FormControl';
-import Container from 'react-bootstrap/Container';
 import Search from './Search';
+import Themes from './Themes';
+import BookMark from './BookMark';
+import {useSelector} from 'react-redux';
 
-class Header extends React.Component{
-    constructor(props){
-      super(props);
-      
-     
-    }
+
+function Header(props){
     
-    render(){
      const headerstyle = { border: '0px solid grey'}   
+     const isLogged = useSelector(state=>state.isLogged);
      return ( 
-     <Container fluid>
        
        <Navbar bg="dark" variant="dark">
         <Navbar.Brand href="#home"><h2 className="">
-        {this.props.name}
+        {props.name}
       </h2></Navbar.Brand>
         <Nav className="mr-auto">
           <Nav.Link>
-          {this.props.children}
+          {props.children}
          
           </Nav.Link>
           
         </Nav>
+        <Themes></Themes>
+        <BookMark></BookMark>
         <Search></Search>
+        {isLogged? <Button>logout</Button>: <Button variant="outline-info">Login</Button>}
       </Navbar>
       
        
-    
-    </Container>
-     )}
+     )
+
 }
 
 export default Header;
