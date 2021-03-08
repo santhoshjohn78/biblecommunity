@@ -1,4 +1,4 @@
-export const gotoPageAction = (pageurl,bookId,bookName,chapterId,pageContent,paragraphs,totalPages,currentPageNo) =>{
+export const gotoPageAction = (pageurl,bookId,bookName,chapterId,pageContent,paragraphs,totalPages,verseProps,currentPageNo) =>{
     return {
         type: "GOTO",
         pageurl,
@@ -8,6 +8,7 @@ export const gotoPageAction = (pageurl,bookId,bookName,chapterId,pageContent,par
         pageContent,
         paragraphs,
         totalPages,
+        verseProps,
         currentPageNo
         
     }
@@ -26,5 +27,14 @@ export const changeFontFamilyAction = (font) => {
     return {
         type: "FONTFAMILY",
         font
+    }
+}
+
+export const changeThemeColorAction = (bgColor,fontColor) => {
+
+    return {
+        type: "THEMECOLOR",
+        bgColor,
+        fontColor
     }
 }

@@ -13,7 +13,7 @@ import Scrollbar from 'react-scrollbars-custom';
 
 function ToolBarComponent(props){
 
-    console.log(props);
+    console.log("ToolBarComponent is being rendered...");
     const { name } = props;
     const [showTOC,setShowTOC] = useState(true);
 

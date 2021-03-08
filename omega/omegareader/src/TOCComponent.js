@@ -64,7 +64,7 @@ function TOCComponent(props){
                                 setBookid(bookId);
                                 setMaxValue(nofChapters);
                                 setSliderValue(chapterid);
-                                dispatch(gotoPageAction(pageurl,bookId,bookName,chapterid,data,data.paragraphs,nofChapters,chapterid));
+                                dispatch(gotoPageAction(pageurl,bookId,bookName,chapterid,data,data.paragraphs,nofChapters,{},chapterid));
                                 }) );
        
         

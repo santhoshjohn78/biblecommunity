@@ -6,6 +6,8 @@ import { Button } from 'react-bootstrap';
 import Header from './Header';
 import ToolBarComponent from './ToolBarComponent';
 import MainBody from './MainBody';
+import Scrollbar from 'react-scrollbars-custom';
+import Media from './Media';
 
 class App extends React.Component{
 
@@ -28,7 +30,24 @@ class App extends React.Component{
 
           </ToolBarComponent> */}
         </Header>
-        <MainBody state={this.state}></MainBody>
+        <Container  fluid="true">
+          <Row>
+          <Col sm={2}>
+            <ToolBarComponent></ToolBarComponent>
+           </Col>
+           <Col sm={7}>
+           <MainBody state={this.state}></MainBody>
+           </Col>
+           <Col sm={3}>
+                {/* <Scrollbar style={{ height: 700 }}> */}
+                <Media></Media>
+                <Media></Media>
+                <Media></Media>
+                {/* </Scrollbar> */}
+           </Col>
+          </Row>
+        </Container>
+        
 
         
     </div>  

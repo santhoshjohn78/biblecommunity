@@ -15,7 +15,7 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
  import ListGroup from 'react-bootstrap/ListGroup';
 // import ListGroupItem from 'react-bootstrap/ListGroupItem';
-import { changeFontSizeAction,changeFontFamilyAction } from './actions'; 
+import { changeFontSizeAction,changeFontFamilyAction,changeThemeColorAction } from './actions'; 
 import {useSelector,useDispatch} from 'react-redux';
 
 import styled from 'styled-components';
@@ -45,8 +45,23 @@ function Themes(props){
       const fontsize = e.target.value;
      
       dispatch(changeFontSizeAction(fontsize));
-  }
+    }
 
+    const handleThemeColorChange = (e) => {
+      setRadioValue(e.currentTarget.value);
+      switch (e.currentTarget.value){
+        case "1": dispatch(changeThemeColorAction("white","black"));
+                  break;
+        case "2": dispatch(changeThemeColorAction("#FFE599","#7C422F"));
+                  break;
+        case "3": dispatch(changeThemeColorAction("#444444","white"));
+                  break;
+        default:
+          dispatch(changeThemeColorAction("white","black"));
+      }
+        
+      console.log(e.currentTarget.value);
+    }
     
     const styles = {
         iconStyle: {
@@ -114,7 +129,7 @@ function Themes(props){
                 name="radio"
                 value={radio.value}
                 checked={radioValue === radio.value}
-                onChange={(e) => setRadioValue(e.currentTarget.value)}
+                onChange={(e) => {handleThemeColorChange(e)}}
               >
                 {radio.name}
               </ToggleButton>
