@@ -1,4 +1,4 @@
-# bible reading community
+# Bible reading community
 
 This is a bible reading web application that gives you audio, video, txt, image commentary as you read passages in the bible.
 
