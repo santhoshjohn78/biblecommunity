@@ -51,14 +51,17 @@ function MainBody(props){
     
     const verseRefs = useRef();
     verseRefs.current = [];
+    
+   
         
     
     const addtoverseRefs = (el) =>{
-        console.log("inside addtoverseRefs....");
+       
         if (el && !verseRefs.current.includes(el)){
             verseRefs.current.push(el);
+       
         }
-        //console.log(el);
+
     }
 
     useEffect(() =>{
@@ -77,7 +80,7 @@ function MainBody(props){
                                 
                             }) ;
   
-    
+                    
    },[]);
   
    const fetchPageContent = (pageurl,currentChapterNo) => {
@@ -92,7 +95,7 @@ function MainBody(props){
                             })
                               .then((data) => { 
                                  
-                                  dispatch(gotoPageAction(config.BASE_PAGE_URL+pageurl,bookid,bookName,
+                                  dispatch(gotoPageAction(pageurl,bookid,bookName,
                                     currentChapterNo,data,data.paragraphs,-1,{},currentChapterNo));
                                 }) ;
 
@@ -100,9 +103,10 @@ function MainBody(props){
     }
   
     const handleOnVerseClick = (verseId,verseName) => {
+       
         console.log("handleOnVerseClick............."+verseId+"-"+verseName);
-        //setSelectedversenum(verseId);
-        //setSelectedverse(verseName);
+        setSelectedversenum(verseId);
+        setSelectedverse(verseName);
        
     }
   
@@ -119,10 +123,19 @@ function MainBody(props){
     const handleChangeColor = (color) => {
        
         setBgColor(color.hex );
-        verseRefs.current[selectedversenum-1].style.background=bgColor;
+        verseRefs.current[selectedversenum-1].style.background=color.hex;
+        for(let i =0;i<paragraphs.length;i++){
+          for(let j=0;j<paragraphs[i].spans.length;j++){
+            if (paragraphs[i].spans[j].value===selectedversenum){
+              paragraphs[i].spans[j].annotationColor=color.hex;
+              break;
+            }
+          }
+        }
         
+        dispatch(gotoPageAction(-1,-1,-1,-1,-1,paragraphs,-1,-1,-1));
     }
-    
+
    
       const popover = 
              (<Popover id="popover-basic">
@@ -153,11 +166,13 @@ function MainBody(props){
                   <p>
                     {
                      element.spans.map(spanelements =>
-                     <OverlayTrigger  key={spanelements.value} trigger="click" rootClose={true} onToggle={()=> {
-                       console.log("closing overlay"); handleOnVerseClick(spanelements.value,spanelements.verseText); }} placement="auto" overlay={popover}>
+                      <OverlayTrigger  key={spanelements.value} trigger="click" rootClose={true} onToggle={()=> {
+                        console.log("closing overlay"); handleOnVerseClick(spanelements.value,spanelements.verseText); }} placement="auto" overlay={popover}>
                        
-                      <span key={spanelements.value} ref={addtoverseRefs} 
-                      //onClick={(e) => handleOnVerseClick(spanelements.value,spanelements.verseText)}
+                      <span key={spanelements.value} 
+                      ref={addtoverseRefs} 
+                      style={{backgroundColor:spanelements.annotationColor}}
+                      
                        >
                         {spanelements.value} 
                         {spanelements.verseText}

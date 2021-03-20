@@ -1,19 +1,21 @@
 import React, {useState,useEffect} from 'react';
-import Navbar from 'react-bootstrap/Navbar';
-import Nav from 'react-bootstrap/Nav';
-import Modal from 'react-bootstrap/Modal';
-import Config from './Config';
+
+import Config from '../Config';
 import {useSelector,useDispatch} from 'react-redux';
-import { BsBookmarkPlus, BsBookmarkFill } from "react-icons/bs";
+import Card from 'react-bootstrap/Card';
+import Container from 'react-bootstrap/Container';
+import { BsFillTrashFill } from "react-icons/bs";
+import styled from 'styled-components';
 
-
-function BookMark(props){
+import { gotoPageAction } from '../actions'; 
+function BookMarksComponent(props){
     
     const config = new Config();
-    const [isBookMarked,setIsBookMarked] = useState(false);
-    const [selectedFont, setSelectedFont] = useState(null);
-    const pageurl = useSelector(state=>state.page.pageurl);
-    
+    const fontFamilyValue = useSelector(state=>state.fontFamily);
+    const [bookMarksList,setBookMarksList] = useState([]);
+    const url = config.BOOKMARK_URL+config.DEFAULT_USER_ID;
+    const dispatch = useDispatch();
+
     const styles = {
       iconStyle: {
           paddingRight:"50%",
@@ -29,56 +31,87 @@ function BookMark(props){
         userId: config.DEFAULT_USER_ID,
         bookId:useSelector(state=>state.page.bookId),
         bookName:useSelector(state=>state.page.bookName),
-        pageUrl: pageurl,
+       // pageUrl: pageurl,
         chapterId:useSelector(state=>state.page.currentPageNo),
         pageNumber:useSelector(state=>state.page.currentPageNo)
       })
     }
     
+
     const checkBookmarkRequestOption = {
         method: 'GET',
         headers: {'Content-Type':'application/json'}
     }
-
+    const deleteBookmarkRequestOption = {
+      method: 'DELETE',
+      headers: {'Content-Type':'application/json'}
+  }
     useEffect(() =>{
-        console.log("Inside render of Bookmark check if page "+pageurl+" is bookmarked");
-        fetch(config.BOOKMARK_URL+config.DEFAULT_USER_ID+"/page/"+pageurl,checkBookmarkRequestOption)
-        .then((response) =>{
-          if (response.status === 200)
-            setIsBookMarked(true);
-          else
-            setIsBookMarked(false);
-        });
-    },[pageurl]);
+        console.log("list bookmarks....");
 
-    const handleOnclick = () => {
-
-      if (isBookMarked==false)
-        setIsBookMarked(true);
-      else
-        setIsBookMarked(false);   
-      
-      fetch(config.BOOKMARK_URL+config.DEFAULT_USER_ID, requestOptions)
-        .then((response) => {
-          return response.json()
-         })
-         .then((data) =>{  console.log("call to add bookmark:"+data);});
-    }
+        fetch(url,checkBookmarkRequestOption).then(res => res.json())
+          .then((data)=>{setBookMarksList(data);console.log(data);});
+        
+    },[bookMarksList]);
     
+    const handleOnDeleteClick = (bookId) =>{
+      console.log("Delete bookmark "+bookId);
+      
+      fetch(url+"/"+bookId,deleteBookmarkRequestOption)
+        .then(res => console.log(res.status));
+      
+      fetch(url,checkBookmarkRequestOption).then(res => res.json())
+      .then((data)=>{setBookMarksList(data);console.log(data);});
+      
+  }
+    
+  const handleGotoPage = (bookId,bookName,pageurl,chapterid,nofChapters) =>{
+   
+        fetch(config.BASE_PAGE_URL+pageurl)
+                     .then((response) => { 
+                         return response.json()
+                        })
+                       .then((data)=>{
+                             return data.body;
+                        })
+                          .then((data) => {
+                            
+                            
+                            dispatch(gotoPageAction(pageurl,bookId,bookName,chapterid,data,data.paragraphs,-1,{},chapterid));
+                            }) ;
+   
+  }
     
     return ( 
-      <div>
-         <span onClick={handleOnclick}>
-           <h4>
-              {!isBookMarked && <BsBookmarkPlus style={styles.iconStyle} ></BsBookmarkPlus>}
-              {isBookMarked && <BsBookmarkFill style={styles.iconStyle} ></BsBookmarkFill>}
-           </h4>
-          </span>
-        
-
-       
-      </div>
+      <Container fluid="true">  
+          {
+            bookMarksList.map((element,i) =>
+              <div key={i} style={{paddingLeft:50}}>
+                <Card>
+                    
+                    <Card.Body>
+                      <Card.Title>
+                        <span onClick={()=>handleOnDeleteClick(element.id)}>
+                          <BsFillTrashFill></BsFillTrashFill>
+                        </span>
+                        </Card.Title>
+                        <span onClick={()=>handleGotoPage(element.bookId,element.bookName,element.pageUrl,element.pageNumber,element.chapterId)}>
+                          <blockquote className="blockquote mb-0">
+                            <h5>{element.bookName} {element.chapterId}</h5>
+                            <footer className="blockquote-footer">
+                                {element.formatedBookMarkedDate}
+                            </footer>
+                            </blockquote>
+                          </span>
+                    </Card.Body>
+                </Card>     
+              
+              </div>            
+            )
+          }
+    
+      </Container>
     );
 }
 
-export default BookMark;
+export default BookMarksComponent;

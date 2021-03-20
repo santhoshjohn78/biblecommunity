@@ -15,6 +15,12 @@ class Config {
 
     SEARCH_URL = "http://localhost:8080/api/bible/search/v1?q=";
 
+    BOOKMARK_URL = "http://localhost:8080/api/bookmark/user/";
+
+    
+
+    DEFAULT_USER_ID = "123456";
+
     SITE_TITLE = "";
 }
 

@@ -4,7 +4,8 @@ import { BsBook } from "react-icons/bs";
 import SideNav, { Toggle, Nav, NavItem, NavIcon, NavText } from '@trendmicro/react-sidenav';
 import '@trendmicro/react-sidenav/dist/react-sidenav.css';
 
-import TOCComponent from './TOCComponent';
+import TOCComponent from './menu-components/TOCComponent';
+import BookMarksComponent from './menu-components/BookMarksComponent';
 
 import { BsPencil } from "react-icons/bs";
 import { BsBookmarks } from "react-icons/bs";
@@ -16,20 +17,31 @@ function ToolBarComponent(props){
     console.log("ToolBarComponent is being rendered...");
     const { name } = props;
     const [showTOC,setShowTOC] = useState(true);
+    const [showBookMarks, setShowBookMarks] = useState(false);
 
     return (
         <div>
-            <SideNav style={{backgroundColor:'grey'}}
+            <SideNav style={{backgroundColor:'#17a2b8'}}
                     onSelect={(selected) => {
                         // Add your code here
                         console.log(selected);
                         if (selected === 'toc'){
-                            if (showTOC == false)
+                            if (showTOC == false){
                                 setShowTOC(true);
-                            else
+                                setShowBookMarks(false);
+                            }else{
                                 setShowTOC(false);
+                            }
                         }
                         
+                        if (selected === 'bookmarks'){
+                            if (showBookMarks == false){
+                                setShowBookMarks(true);
+                                setShowTOC(false);
+                            }else{
+                                setShowBookMarks(false);
+                            }
+                        }
                     }}
                 >
                 <SideNav.Toggle />
@@ -70,6 +82,7 @@ function ToolBarComponent(props){
             </SideNav>
             <Scrollbar style={{ height: 700 }}>
             {showTOC &&  <TOCComponent></TOCComponent>}
+            {showBookMarks &&  <BookMarksComponent></BookMarksComponent>}
             </Scrollbar>
           </div>
     );

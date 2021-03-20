@@ -83,10 +83,10 @@ function TOCComponent(props){
                     <div key={i}>
                         <Card>
                             <Card.Header>
-                            <Accordion.Toggle as={Button} style={{paddingLeft:50}} variant="link" eventKey={element.playOrder}>
-                                <h5>{element.title}</h5>
-                                
-                            </Accordion.Toggle>
+                                <Accordion.Toggle as={Button} style={{paddingLeft:50}} variant="warning" eventKey={element.playOrder}>
+                                    <h5>{element.title}</h5>
+                                    
+                                </Accordion.Toggle>
                             </Card.Header>
                             <Accordion.Collapse eventKey={element.playOrder}>
                             <Card.Body style={{paddingLeft:50}}><h4>
