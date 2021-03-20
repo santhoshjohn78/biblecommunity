@@ -33,7 +33,7 @@ Getting elasticsearch set up. Use docker image from docker hub
 
 // pulls elasticsearch from docker hub
 ```
-docker pull elasticsearch
+docker pull elasticsearch:7.10.1
 ```
 
 // creates a bridge network
@@ -48,7 +48,11 @@ docker run -d --name elasticsearch --net nazreen -p 9200:9200 -p 9300:9300 -e "d
 #### Kibana install
 // pulls kibana
 ```
-docker pull kibana
+docker pull kibana:7.10.1
+```
+// run kibana
+```
+docker run -d --name kibana --net nazreen -p 5601:5601 kibana:7.10.1
 ```
 
 //how to connect filebeat to elasticsearch and kibana using network
