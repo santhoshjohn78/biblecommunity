@@ -77,7 +77,7 @@ docker pull mongo-express
 ```
 //how to start mongo-express 
 ```
-docker run --network nazreen -e ME_CONFIG_MONGODB_SERVER=mongodb -p 8081:8081 mongo-express
+docker run --network nazreen -e ME_CONFIG_MONGODB_SERVER=mongodb -p 8081:8081 -d mongo-express
 ```
 
 ## Running the tests
