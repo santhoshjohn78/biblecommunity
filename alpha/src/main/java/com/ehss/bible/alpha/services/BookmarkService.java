@@ -25,7 +25,7 @@ public class BookmarkService {
         Date markedDate = new Date();
         DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
         String formattedDate = dateFormat.format(markedDate);
-        bookmark.setFormatedBookMarkedDate(formattedDate);
+        bookmark.setFormattedBookMarkedDate(formattedDate);
         bookmark.setBookMarkedDate(markedDate);
         bookmarkRepo.save(bookmark);
         return bookmark;

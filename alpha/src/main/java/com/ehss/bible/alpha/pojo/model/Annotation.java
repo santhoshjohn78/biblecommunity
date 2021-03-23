@@ -5,6 +5,7 @@ import org.springframework.data.annotation.Id;
 
 import java.util.Date;
 
+
 @Getter
 @Setter
 @Builder
@@ -12,7 +13,7 @@ import java.util.Date;
 @AllArgsConstructor
 @EqualsAndHashCode
 @ToString
-public class Bookmark {
+public class Annotation {
 
     @Id
     String id;
@@ -21,7 +22,13 @@ public class Bookmark {
     String bookName;
     String pageUrl;
     String chapterId;
+    Integer verseNumber;
+    String verseText;
     String pageNumber;
-    Date bookMarkedDate;
-    String formattedBookMarkedDate;
+    Date annotationDate;
+    String formattedAnnotationDate;
+    boolean sharedAnnotation;
+    String[] tags;
+    String[] mediaUrls;
+
 }
