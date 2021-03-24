@@ -2,6 +2,9 @@ import React, {useState,useRef,useEffect} from 'react';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
+import Form from 'react-bootstrap/Form';
+
+import InputGroup from 'react-bootstrap/InputGroup';
 import Config from './Config';
 import ToolBarComponent from './ToolBarComponent';
 import { Button } from 'react-bootstrap';
@@ -11,8 +14,10 @@ import Media from './Media';
 import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
 import Overlay from 'react-bootstrap/Overlay';
 
+import Modal from 'react-bootstrap/Modal';
+
 import Popover from 'react-bootstrap/Popover';
-import {CirclePicker} from 'react-color';
+import {CirclePicker,TwitterPicker,SwatchesPicker } from 'react-color';
 
 import {useSelector,useDispatch} from 'react-redux';
 import Scrollbar from 'react-scrollbars-custom';
@@ -38,16 +43,20 @@ function MainBody(props){
     const [selectedversenum,setSelectedversenum] = useState(null);
     const [selectedverse,setSelectedverse] = useState(null);
     const [bgColor,setBgColor] = useState("#fff");
+    const [showPopup,setShowPopup] = useState(false);
     const dispatch = useDispatch();
     const paragraphFontSize = useSelector(state=>state.fontSize);
     const fontFamilyValue = useSelector(state=>state.fontFamily);
     const themeBgColor = useSelector(state => state.theme.bgColor);
     const themeFontColor = useSelector(state => state.theme.fontColor);
-    const HighlightBackground = styled.span`background-color:${bgColor}`;
+    const HighlightBackground = styled.p`background-color:${bgColor}`;
     const BackgroundTheme = styled.div`background-color:${themeBgColor};`;    
     const Paragraph = styled.p`font-size: ${paragraphFontSize}px;font-family: ${fontFamilyValue}; background-color:${themeBgColor}; color:${themeFontColor}`;
-    
     const Heading2 = styled.h2`font-size: ${paragraphFontSize}px;font-family: ${fontFamilyValue}; background-color:${themeBgColor}; color:${themeFontColor}`;
+    const [annotationComment,setAnnotationComment] = useState("");
+    const [annotationTags,setAnnotationTags] = useState(null);
+    const [annotationMediaUrl,setAnnotationMediaUrl] = useState(null);
+    const [annotationSharedFlag,setAnnotationSharedFlag] = useState(true);
     
     const verseRefs = useRef();
     verseRefs.current = [];
@@ -75,10 +84,10 @@ function MainBody(props){
                         .then((data)=>{
                             return data.body;
                         })
-                            .then((data) => { 
-                                dispatch(gotoPageAction(config.SAMPLE_PAGE_URL,bookid,bookName,1,data,data.paragraphs,50,{},1));
-                                
-                            }) ;
+                        .then((data) => { 
+                            dispatch(gotoPageAction(config.SAMPLE_PAGE_URL,bookid,bookName,1,data,data.paragraphs,50,{},1));
+                            
+                        }) ;
   
                     
    },[]);
@@ -99,20 +108,23 @@ function MainBody(props){
                                     currentChapterNo,data,data.paragraphs,-1,{},currentChapterNo));
                                 }) ;
 
-      
     }
   
     const handleOnVerseClick = (verseId,verseName) => {
-       
-        console.log("handleOnVerseClick............."+verseId+"-"+verseName);
         setSelectedversenum(verseId);
         setSelectedverse(verseName);
-       
+         setShowPopup(true);
+    }
+
+    const handleSaveAnnotation = () => {
+      console.log(annotationComment);
+      console.log(annotationMediaUrl);
+      console.log(annotationTags);
+      console.log(annotationSharedFlag);
+       setShowPopup(false);
     }
   
     const handleSliderChange = (e) => {
-        //sliderValue = e.target.value;
-        console.log("-----------------"+e.target.value);
         const chapid = e.target.value;
        
         fetch(config.QUERY_PAGE_URL+bookid+"/chapter/"+e.target.value)
@@ -124,6 +136,7 @@ function MainBody(props){
        
         setBgColor(color.hex );
         verseRefs.current[selectedversenum-1].style.background=color.hex;
+        //TODO this should be removed and replaced by API call.
         for(let i =0;i<paragraphs.length;i++){
           for(let j=0;j<paragraphs[i].spans.length;j++){
             if (paragraphs[i].spans[j].value===selectedversenum){
@@ -136,22 +149,88 @@ function MainBody(props){
         dispatch(gotoPageAction(-1,-1,-1,-1,-1,paragraphs,-1,-1,-1));
     }
 
-   
-      const popover = 
-             (<Popover id="popover-basic">
-              <Popover.Title as="h3">{bookName} {sliderValue}:{selectedversenum}</Popover.Title>
-              <Popover.Content>
-                <textarea placeholder="Comment on this verse." rows={5}
-                    cols={35}></textarea>
-                <hr></hr>
-                <CirclePicker color={bgColor}  onChangeComplete={handleChangeColor}></CirclePicker>
-                
-              </Popover.Content>
-            </Popover>
-          );
-        
+      
       return (<div>
-            <BackgroundTheme>
+        <Modal
+        size="lg"
+        show={showPopup}
+        onHide={() => setShowPopup(false)} centered
+        aria-labelledby="example-modal-sizes-title-lg"
+      >
+        <Modal.Header closeButton>
+          <Modal.Title id="example-modal-sizes-title-lg">
+            {bookName} {sliderValue}:{selectedversenum}
+          </Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <Form>
+                <Row>
+                  <Col>
+                    <HighlightBackground>
+                        {selectedverse}
+                    </HighlightBackground>
+                    
+                  </Col>
+                </Row>
+                <Row>
+                  <Col>
+                    <Form.Group controlId="formgrp.comments">
+                      <Form.Label>Comment on this verse</Form.Label>
+                      <Form.Control as="textarea" value={annotationComment} onChange={e => setAnnotationComment(e.target.value)} 
+                        type="textarea" rows={9} />
+                    </Form.Group>
+                    </Col>
+                    <Col>
+                    <Form.Group controlId="formgrp.colorpicker">
+                      <Form.Label>Pick a highlight color for this verse</Form.Label>
+                     
+                      <SwatchesPicker color={bgColor}  onChangeComplete={handleChangeColor}></SwatchesPicker>
+                    </Form.Group>
+                    </Col>   
+                 </Row>
+                 <Row>
+                   <Col>
+                     <Form.Group controlId="formgrp.comments">
+                        <Form.Label>Tags</Form.Label>
+                        <Form.Control type="text" value={annotationTags}  onChange={e => setAnnotationTags(e.target.value)}  aria-describedby="tagHelpBlock"/>
+                        <Form.Text id="tagHelpBlock" muted>
+                         You can use comma ',' to add multiple tags. E.g. #Prayer,#Hope, things to remember, this to do
+                      </Form.Text>
+                      </Form.Group>
+                      
+                   </Col>
+                   <Col>
+                      <label htmlFor="basic-url">Media</label>
+                      <InputGroup className="mb-3">
+                        <InputGroup.Prepend>
+                          <InputGroup.Text id="basic-addon3">
+                            URL
+                          </InputGroup.Text>
+                        </InputGroup.Prepend>
+                        <Form.Control id="basic-url" value={annotationMediaUrl} onChange={e => setAnnotationMediaUrl(e.target.value)}   aria-describedby="basic-addon3" placeholder="of audio,video,or image about this verse."/>
+                          <Form.Text id="tagHelpBlock" muted>
+                           Paste the URL of a video (Vimeo, YouTube etc) and we would embed it for other readers if your media is appropriate for this verse.
+                          </Form.Text>
+
+                      </InputGroup>
+                   </Col>
+                 </Row>
+                 <Row>
+                   <Col>
+                      <Form.Group id="formGridCheckbox">
+                        <Form.Check type="checkbox" value={annotationSharedFlag}  onChange={e => setAnnotationSharedFlag(e.target.value)} label="Do not share this with others." />
+                      </Form.Group>
+                   </Col>
+                 </Row>
+          </Form>
+            
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={() => setShowPopup(false)}>Close</Button>
+          <Button variant="primary" onClick={() => handleSaveAnnotation()}>Save changes</Button>
+        </Modal.Footer>
+      </Modal>
+      <BackgroundTheme>
       
             
           <Scrollbar style={{ height: 700 }}>
@@ -166,10 +245,9 @@ function MainBody(props){
                   <p>
                     {
                      element.spans.map(spanelements =>
-                      <OverlayTrigger  key={spanelements.value} trigger="click" rootClose={true} onToggle={()=> {
-                        console.log("closing overlay"); handleOnVerseClick(spanelements.value,spanelements.verseText); }} placement="auto" overlay={popover}>
+                      
                        
-                      <span key={spanelements.value} 
+                      <span onClick={()=>{handleOnVerseClick(spanelements.value,spanelements.verseText); }} key={spanelements.value} 
                       ref={addtoverseRefs} 
                       style={{backgroundColor:spanelements.annotationColor}}
                       
@@ -178,7 +256,7 @@ function MainBody(props){
                         {spanelements.verseText}
                       </span>
                       
-                       </OverlayTrigger>
+                      
                      )}
                   </p>
                   </Paragraph>
