@@ -6,6 +6,7 @@ import '@trendmicro/react-sidenav/dist/react-sidenav.css';
 
 import TOCComponent from './menu-components/TOCComponent';
 import BookMarksComponent from './menu-components/BookMarksComponent';
+import AnnotationListComponent from './menu-components/AnnotationListComponent';
 
 import { BsPencil } from "react-icons/bs";
 import { BsBookmarks } from "react-icons/bs";
@@ -18,6 +19,7 @@ function ToolBarComponent(props){
     const { name } = props;
     const [showTOC,setShowTOC] = useState(true);
     const [showBookMarks, setShowBookMarks] = useState(false);
+    const [showAnnotations, setAnnotations] = useState(false);
 
     return (
         <div>
@@ -29,6 +31,7 @@ function ToolBarComponent(props){
                             if (showTOC == false){
                                 setShowTOC(true);
                                 setShowBookMarks(false);
+                                setAnnotations(false);
                             }else{
                                 setShowTOC(false);
                             }
@@ -38,8 +41,20 @@ function ToolBarComponent(props){
                             if (showBookMarks == false){
                                 setShowBookMarks(true);
                                 setShowTOC(false);
+                                setAnnotations(false);
                             }else{
                                 setShowBookMarks(false);
+                            }
+                        }
+
+                        if (selected === 'annotations'){
+                            if (showAnnotations == false){
+                                setAnnotations(true);
+                                setShowBookMarks(false);
+                                setShowTOC(false);
+                            }else{
+                                setAnnotations(false);
+
                             }
                         }
                     }}
@@ -83,6 +98,7 @@ function ToolBarComponent(props){
             <Scrollbar style={{ height: 700 }}>
             {showTOC &&  <TOCComponent></TOCComponent>}
             {showBookMarks &&  <BookMarksComponent></BookMarksComponent>}
+            {showAnnotations && <AnnotationListComponent></AnnotationListComponent>}
             </Scrollbar>
           </div>
     );

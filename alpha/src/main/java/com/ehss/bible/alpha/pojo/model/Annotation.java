@@ -25,6 +25,8 @@ public class Annotation {
     Integer verseNumber;
     String verseText;
     String pageNumber;
+    String commentText;
+    String highlightColor;
     Date annotationDate;
     String formattedAnnotationDate;
     boolean sharedAnnotation;

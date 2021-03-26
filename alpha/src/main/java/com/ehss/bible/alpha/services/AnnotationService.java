@@ -21,15 +21,15 @@ public class AnnotationService {
     AnnotationRepo annotationRepo;
 
     @Transactional
-    public Annotation createAnnotation(Annotation bookmark){
-        bookmark.setId(UUID.randomUUID().toString());
+    public Annotation createAnnotation(Annotation annotation){
+        annotation.setId(UUID.randomUUID().toString());
         Date markedDate = new Date();
         DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
         String formattedDate = dateFormat.format(markedDate);
-        bookmark.setFormattedAnnotationDate(formattedDate);
-        bookmark.setAnnotationDate(markedDate);
-        annotationRepo.save(bookmark);
-        return bookmark;
+        annotation.setFormattedAnnotationDate(formattedDate);
+        annotation.setAnnotationDate(markedDate);
+        annotationRepo.save(annotation);
+        return annotation;
     }
 
     @Transactional

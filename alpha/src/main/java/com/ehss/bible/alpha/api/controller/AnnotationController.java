@@ -29,7 +29,7 @@ public class AnnotationController {
         return new ResponseEntity(annotationService.createAnnotation(annotation),HttpStatus.CREATED);
     }
 
-    @DeleteMapping(path="/user/{userId}/{bookmarkId}",produces = MediaType.APPLICATION_JSON_VALUE,consumes = MediaType.APPLICATION_JSON_VALUE)
+    @DeleteMapping(path="/user/{userId}/{annotationId}",produces = MediaType.APPLICATION_JSON_VALUE,consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public ResponseEntity<Void> delete(@PathVariable String userId,@PathVariable String annotationId) throws Exception{
         annotationService.deleteAnnotation(annotationId);
@@ -45,20 +45,20 @@ public class AnnotationController {
 
     @GetMapping(path="/user/{userId}/book/{bookId}",produces = MediaType.APPLICATION_JSON_VALUE,consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public ResponseEntity<List<Annotation>> getBookmark(@PathVariable String userId,@PathVariable String bookId) throws Exception{
+    public ResponseEntity<List<Annotation>> getAnnotations(@PathVariable String userId,@PathVariable String bookId) throws Exception{
 
         return new ResponseEntity(annotationService.getAnnotationsByBookId(userId,bookId),HttpStatus.OK);
     }
 
     @GetMapping(path="/user/{userId}/book/{bookId}/chapter/{chapterId}",produces = MediaType.APPLICATION_JSON_VALUE,consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public ResponseEntity<Annotation> getBookmark(@PathVariable String userId,@PathVariable String bookId,@PathVariable String chapterId) throws Exception{
+    public ResponseEntity<List<Annotation>> getAnnotations(@PathVariable String userId,@PathVariable String bookId,@PathVariable String chapterId) throws Exception{
         return new ResponseEntity(annotationService.getAnnotations(userId, bookId,chapterId),HttpStatus.OK);
     }
 
     @GetMapping(path="/user/{userId}/page/{pageUrl}",produces = MediaType.APPLICATION_JSON_VALUE,consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public ResponseEntity<Annotation> getBookmarkByUrl(@PathVariable String userId,@PathVariable String pageUrl) throws Exception{
+    public ResponseEntity<List<Annotation>> getAnnotationsByUrl(@PathVariable String userId,@PathVariable String pageUrl) throws Exception{
         return new ResponseEntity(annotationService.getAnnotationsByPageUrl(userId, pageUrl),HttpStatus.OK);
     }
 }

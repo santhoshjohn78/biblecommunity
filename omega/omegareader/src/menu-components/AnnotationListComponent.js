@@ -8,12 +8,12 @@ import { BsFillTrashFill } from "react-icons/bs";
 import styled from 'styled-components';
 
 import { gotoPageAction } from '../actions'; 
-function BookMarksComponent(props){
+function AnnotationListComponent(props){
     
     const config = new Config();
     const fontFamilyValue = useSelector(state=>state.fontFamily);
-    const [bookMarksList,setBookMarksList] = useState([]);
-    const url = config.BOOKMARK_URL+config.DEFAULT_USER_ID;
+    const [annotationList,setAnnotationList] = useState([]);
+    const url = config.ANNOTATION_URL+config.DEFAULT_USER_ID;
     const dispatch = useDispatch();
 
     const styles = {
@@ -24,44 +24,30 @@ function BookMarksComponent(props){
           color:"#fff"
       }
     }
-    const requestOptions = {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ 
-        userId: config.DEFAULT_USER_ID,
-        bookId:useSelector(state=>state.page.bookId),
-        bookName:useSelector(state=>state.page.bookName),
-       // pageUrl: pageurl,
-        chapterId:useSelector(state=>state.page.currentPageNo),
-        pageNumber:useSelector(state=>state.page.currentPageNo)
-      })
-    }
     
-
-    const checkBookmarkRequestOption = {
+    const getAnnotationRequestOption = {
         method: 'GET',
         headers: {'Content-Type':'application/json'}
     }
-    const deleteBookmarkRequestOption = {
+
+    const deleteAnnotationRequestOption = {
       method: 'DELETE',
       headers: {'Content-Type':'application/json'}
-  }
-    useEffect(() =>{
-        console.log("list bookmarks....");
+    }
 
-        fetch(url,checkBookmarkRequestOption).then(res => res.json())
-          .then((data)=>{setBookMarksList(data);console.log(data);});
-        
+    useEffect(() =>{
+        fetch(url,getAnnotationRequestOption).then(res => res.json())
+          .then((data)=>{setAnnotationList(data);console.log(data);});
     },[]);
     
-    const handleOnDeleteClick = (bookId) =>{
-      console.log("Delete bookmark "+bookId);
+    const handleOnDeleteClick = (annotationId) =>{
+      console.log("Delete Annotation "+annotationId);
       
-      fetch(url+"/"+bookId,deleteBookmarkRequestOption)
+      fetch(url+"/"+annotationId,deleteAnnotationRequestOption)
         .then(res => console.log(res.status));
       
-      fetch(url,checkBookmarkRequestOption).then(res => res.json())
-      .then((data)=>{setBookMarksList(data);console.log(data);});
+      fetch(url,getAnnotationRequestOption).then(res => res.json())
+      .then((data)=>{setAnnotationList(data);console.log(data);});
       
   }
     
@@ -83,7 +69,7 @@ function BookMarksComponent(props){
     return ( 
       <Container fluid="true">  
           {
-            bookMarksList.map((element,i) =>
+            annotationList.map((element,i) =>
               <div key={i} style={{paddingLeft:50}}>
                 <Card>
                     
@@ -96,8 +82,14 @@ function BookMarksComponent(props){
                         <span onClick={()=>handleGotoPage(element.bookId,element.bookName,element.pageUrl,element.pageNumber,element.chapterId)}>
                           <blockquote className="blockquote mb-0">
                             <h5>{element.bookName} {element.chapterId}</h5>
+                            <p>
+                              {element.verseNumber}  {element.verseText}
+                            </p>
+                            <p>
+                              {element.commentText}
+                            </p>
                             <footer className="blockquote-footer">
-                                {element.formatedBookMarkedDate}
+                                {element.formattedAnnotationDate}
                             </footer>
                             </blockquote>
                           </span>
@@ -112,4 +104,4 @@ function BookMarksComponent(props){
     );
 }
 
-export default BookMarksComponent;
+export default AnnotationListComponent;

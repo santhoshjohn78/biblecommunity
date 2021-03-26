@@ -54,8 +54,8 @@ function MainBody(props){
     const Paragraph = styled.p`font-size: ${paragraphFontSize}px;font-family: ${fontFamilyValue}; background-color:${themeBgColor}; color:${themeFontColor}`;
     const Heading2 = styled.h2`font-size: ${paragraphFontSize}px;font-family: ${fontFamilyValue}; background-color:${themeBgColor}; color:${themeFontColor}`;
     const [annotationComment,setAnnotationComment] = useState("");
-    const [annotationTags,setAnnotationTags] = useState(null);
-    const [annotationMediaUrl,setAnnotationMediaUrl] = useState(null);
+    const [annotationTags,setAnnotationTags] = useState("");
+    const [annotationMediaUrl,setAnnotationMediaUrl] = useState("");
     const [annotationSharedFlag,setAnnotationSharedFlag] = useState(true);
     
     const verseRefs = useRef();
@@ -116,12 +116,35 @@ function MainBody(props){
          setShowPopup(true);
     }
 
+    const requestOptions = {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ 
+        userId: config.DEFAULT_USER_ID,
+        bookId:useSelector(state=>state.page.bookId),
+        bookName:useSelector(state=>state.page.bookName),
+        pageUrl: useSelector(state=>state.page.pageurl),
+        chapterId:useSelector(state=>state.page.currentPageNo),
+        pageNumber:useSelector(state=>state.page.currentPageNo),
+        verseNumber:selectedversenum,
+        verseText:selectedverse,
+        commentText:annotationComment,
+        highlightColor:bgColor,
+        sharedAnnotation:annotationSharedFlag,
+        tags:[annotationTags],
+        mediaUrls:[annotationMediaUrl]
+      })
+    }
+
     const handleSaveAnnotation = () => {
-      console.log(annotationComment);
-      console.log(annotationMediaUrl);
-      console.log(annotationTags);
-      console.log(annotationSharedFlag);
-       setShowPopup(false);
+      
+      fetch(config.ANNOTATION_URL+config.DEFAULT_USER_ID, requestOptions)
+          .then((response) => {
+            return response.json()
+          })
+          .then((data) =>{  console.log("call to add annotation:"+data);});
+
+      setShowPopup(false);
     }
   
     const handleSliderChange = (e) => {
@@ -151,7 +174,7 @@ function MainBody(props){
 
       
       return (<div>
-        <Modal
+      <Modal
         size="lg"
         show={showPopup}
         onHide={() => setShowPopup(false)} centered
@@ -218,7 +241,8 @@ function MainBody(props){
                  <Row>
                    <Col>
                       <Form.Group id="formGridCheckbox">
-                        <Form.Check type="checkbox" value={annotationSharedFlag}  onChange={e => setAnnotationSharedFlag(e.target.value)} label="Do not share this with others." />
+                        <Form.Check type="checkbox" checked={annotationSharedFlag}  
+                        onChange={e => setAnnotationSharedFlag(e.target.value)} label="Share this with others." />
                       </Form.Group>
                    </Col>
                  </Row>
