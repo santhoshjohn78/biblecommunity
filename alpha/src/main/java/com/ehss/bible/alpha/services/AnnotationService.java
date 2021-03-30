@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
@@ -20,6 +21,14 @@ public class AnnotationService {
     @Autowired
     AnnotationRepo annotationRepo;
 
+    private boolean isValidUrl(String url){
+        if (url==null || url.length()<=0){
+            return false;
+        }else{
+            return true;
+        }
+    }
+
     @Transactional
     public Annotation createAnnotation(Annotation annotation){
         annotation.setId(UUID.randomUUID().toString());
@@ -28,6 +37,15 @@ public class AnnotationService {
         String formattedDate = dateFormat.format(markedDate);
         annotation.setFormattedAnnotationDate(formattedDate);
         annotation.setAnnotationDate(markedDate);
+        List<String> urlList = new ArrayList<>();
+        for(String urls:annotation.getMediaUrls()){
+            if (isValidUrl(urls)){
+                    urlList.add(urls);
+            }
+        }
+
+        annotation.setMediaUrls(urlList.toArray(new String[urlList.size()]));
+
         annotationRepo.save(annotation);
         return annotation;
     }
