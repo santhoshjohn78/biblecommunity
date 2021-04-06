@@ -95,7 +95,7 @@ function ToolBarComponent(props){
                     
                 </SideNav.Nav>
             </SideNav>
-            <Scrollbar style={{ height: 700 }}>
+            <Scrollbar style={{ height: 800 }}>
             {showTOC &&  <TOCComponent></TOCComponent>}
             {showBookMarks &&  <BookMarksComponent></BookMarksComponent>}
             {showAnnotations && <AnnotationListComponent></AnnotationListComponent>}

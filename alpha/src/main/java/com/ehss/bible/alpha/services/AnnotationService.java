@@ -21,6 +21,9 @@ public class AnnotationService {
     @Autowired
     AnnotationRepo annotationRepo;
 
+    @Autowired
+    MediaService mediaService;
+
     private boolean isValidUrl(String url){
         if (url==null || url.length()<=0){
             return false;
@@ -47,6 +50,8 @@ public class AnnotationService {
         annotation.setMediaUrls(urlList.toArray(new String[urlList.size()]));
 
         annotationRepo.save(annotation);
+        mediaService.indexMedia(annotation);
+
         return annotation;
     }
 

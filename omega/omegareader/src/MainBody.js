@@ -1,28 +1,18 @@
 import React, {useState,useRef,useEffect} from 'react';
-import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Form from 'react-bootstrap/Form';
 
 import InputGroup from 'react-bootstrap/InputGroup';
 import Config from './Config';
-import ToolBarComponent from './ToolBarComponent';
 import { Button } from 'react-bootstrap';
 import RangeSlider from 'react-bootstrap-range-slider';
-import Card from 'react-bootstrap/Card';
-import Media from './Media';
-import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
-import Overlay from 'react-bootstrap/Overlay';
-
 import Modal from 'react-bootstrap/Modal';
 
-import Popover from 'react-bootstrap/Popover';
 import {CirclePicker,TwitterPicker,SwatchesPicker } from 'react-color';
 
 import {useSelector,useDispatch} from 'react-redux';
 import Scrollbar from 'react-scrollbars-custom';
-import setPageReducer from './reducers/setPage';
-import setFontSizeReducer from './reducers/setFontSize';
 import styled from 'styled-components';
 import { gotoPageAction } from './actions'; 
 
@@ -257,7 +247,7 @@ function MainBody(props){
       <BackgroundTheme>
       
             
-          <Scrollbar style={{ height: 700 }}>
+          <Scrollbar style={{ height: 800 }}>
              <Heading2><h2>{pageContent.h2}</h2> </Heading2>
              
           {

@@ -1,6 +1,7 @@
 package com.ehss.bible.alpha.repository;
 
 import com.ehss.bible.alpha.config.ESClient;
+import com.ehss.bible.alpha.pojo.elasticsearch.BibleMedia;
 import com.ehss.bible.alpha.pojo.elasticsearch.BibleVerse;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.lucene.search.BooleanQuery;
@@ -29,6 +30,9 @@ import java.util.List;
 public class ElasticsearchRepo {
     private ESClient esClient;
 
+    public static final String BIBLEMEDIAINDEX="biblemedia";
+    public static final String BIBLEVERSEINDEX="bibleverse";
+
     @Autowired
     public ElasticsearchRepo(ESClient esClient){
         this.esClient = esClient;
@@ -55,6 +59,48 @@ public class ElasticsearchRepo {
 
     }
 
+    public void indexBibleMedia(List<BibleMedia> bibleMedias, String indexName){
+        try{
+            BulkRequest bulkRequest = new BulkRequest();
+            for(BibleMedia bibleMedia:bibleMedias) {
+                IndexRequest indexRequest = new IndexRequest(indexName);
+                indexRequest.source(bibleMedia.toString(), XContentType.JSON);
+                bulkRequest.add(indexRequest);
+            }
+            BulkResponse bulkResponse = esClient.getClient().bulk(bulkRequest, RequestOptions.DEFAULT);
+
+        }catch (Exception ex){
+            log.error("",ex);
+        }
+    }
+
+    public SearchResponse searchMediaByBookIdAndChapterNumber(String bookId,String chapterName){
+        SearchSourceBuilder searchSourceBuilder;
+        org.elasticsearch.action.search.SearchRequest req = null;
+        searchSourceBuilder = new SearchSourceBuilder();
+        BoolQueryBuilder boolQuery = QueryBuilders.boolQuery();
+        TermQueryBuilder bookTermQueryBuilder = QueryBuilders.termQuery("bookId.keyword",bookId);
+        TermQueryBuilder chapterTermQueryBuilder = QueryBuilders.termQuery("chapterName.keyword",chapterName);
+
+        boolQuery.must(chapterTermQueryBuilder);
+        boolQuery.must(bookTermQueryBuilder);
+
+        searchSourceBuilder.query(boolQuery);
+        searchSourceBuilder.highlighter(new HighlightBuilder().field("*").requireFieldMatch(false)
+                .highlighterType("unified"));
+        String[] indices ={BIBLEMEDIAINDEX};
+        req = new org.elasticsearch.action.search.SearchRequest(indices, searchSourceBuilder);
+
+        SearchResponse searchRes = null;
+        try {
+            searchRes = this.esClient.getClient().search(req, RequestOptions.DEFAULT);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return searchRes;
+
+    }
+
     public SearchResponse searchVerseByPage(String pageUrl){
         SearchSourceBuilder searchSourceBuilder;
         org.elasticsearch.action.search.SearchRequest req = null;
@@ -68,10 +114,8 @@ public class ElasticsearchRepo {
         searchSourceBuilder.sort("verseNumber", SortOrder.ASC);
         searchSourceBuilder.highlighter(new HighlightBuilder().field("*").requireFieldMatch(false)
                 .highlighterType("unified"));
-        String[] indices ={"bibleverse"};
+        String[] indices ={BIBLEVERSEINDEX};
         req = new org.elasticsearch.action.search.SearchRequest(indices, searchSourceBuilder);
-        //req.searchType(SearchType.DFS_QUERY_THEN_FETCH);
-        //req.preference("_primary_first");
 
 
         SearchResponse searchRes = null;
@@ -99,7 +143,7 @@ public class ElasticsearchRepo {
 
         searchSourceBuilder.highlighter(new HighlightBuilder().field("verseText").requireFieldMatch(true)
                 .highlighterType("unified"));
-        String[] indices ={"bibleverse"};
+        String[] indices ={BIBLEVERSEINDEX};
         req = new org.elasticsearch.action.search.SearchRequest(indices, searchSourceBuilder);
 
         SearchResponse searchRes = null;
@@ -130,7 +174,7 @@ public class ElasticsearchRepo {
 
         searchSourceBuilder.highlighter(new HighlightBuilder().field("*").requireFieldMatch(false)
                 .highlighterType("unified"));
-        String[] indices ={"bibleverse"};
+        String[] indices ={BIBLEVERSEINDEX};
         req = new org.elasticsearch.action.search.SearchRequest(indices, searchSourceBuilder);
 
         SearchResponse searchRes = null;

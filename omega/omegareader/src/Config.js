@@ -24,6 +24,9 @@ class Config {
 
     ANNOTATION_URL = "http://localhost:8080"+"/api/annotation/user/";
 
+    MEDIASEARCH_URL = "http://localhost:8080"+"/api/bible/search/media";
+
+
     DEFAULT_USER_ID = "123456";
 
     SITE_TITLE = "";

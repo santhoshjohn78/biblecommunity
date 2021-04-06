@@ -59,7 +59,56 @@ docker run -d --name kibana --net nazreen -p 5601:5601 kibana:7.10.1
 ```
 docker run --net nazreen docker.elastic.co/beats/filebeat:7.10.1 setup -E setup.kibana.host=kibana:5601 -E output.elasticsearch.hosts=["elasticsearch:9200"]
 ```
+Use Kibana to create these indexes 
+```
+PUT bibleverse
+{
+  "mappings":{
+    "properties":{
+      "key": {"type":"keyword"},
+      "verse_number": { "type": "integer" },
+      "verse_text": {"type":"text"},
+      "chapter_number": {"type":"integer"},
+      "chapter_name":{"type":"text"},
+      "book_id":{"type":"keyword"},
+      "book_name":{"type":"text"},
+      "tags": {"type":"text"},
+      "pageurl":{"type":"keyword"},
+      "anchor_id":{"type":"keyword"},
+      "bible_version_id":{"type":"keyword"},
+      "bible_version_name":{"type":"text"}
+    }
+  }
+}
 
+PUT bibleverse/_mapping
+{
+  
+  "properties":{
+    "url": {"type":"keyword"}
+  }
+
+}
+
+PUT biblemedia
+{
+  "mappings":{
+    "properties":{
+      "key": {"type":"keyword"},
+      "verse_number": { "type": "integer" },
+      "verse_text": {"type":"text"},
+      "chapter_number": {"type":"integer"},
+      "chapter_name":{"type":"text"},
+      "book_id":{"type":"keyword"},
+      "book_name":{"type":"text"},
+      "tags": {"type":"text"},
+      "media_url":{"type":"keyword"},
+      "like_count": {"type":"long"},
+      "view_count": {"type":"long"}
+    }
+  }
+}
+```
 
 #### MongoDB Setup
 Pull mongo db

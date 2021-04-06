@@ -7,7 +7,7 @@ import Header from './Header';
 import ToolBarComponent from './ToolBarComponent';
 import MainBody from './MainBody';
 import Scrollbar from 'react-scrollbars-custom';
-import Media from './Media';
+import Media from './menu-components/Media';
 
 class App extends React.Component{
 
@@ -40,8 +40,6 @@ class App extends React.Component{
            </Col>
            <Col sm={3}>
                 {/* <Scrollbar style={{ height: 700 }}> */}
-                <Media></Media>
-                <Media></Media>
                 <Media></Media>
                 {/* </Scrollbar> */}
            </Col>
