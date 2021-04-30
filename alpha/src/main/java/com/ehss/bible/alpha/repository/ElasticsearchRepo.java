@@ -11,11 +11,13 @@ import org.elasticsearch.action.bulk.BulkResponse;
 import org.elasticsearch.action.index.IndexRequest;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.action.search.SearchType;
+import org.elasticsearch.action.update.UpdateRequest;
 import org.elasticsearch.client.RequestOptions;
 import org.elasticsearch.common.io.stream.StreamOutput;
 import org.elasticsearch.common.xcontent.XContentBuilder;
 import org.elasticsearch.common.xcontent.XContentType;
 import org.elasticsearch.index.query.*;
+import org.elasticsearch.script.Script;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
 import org.elasticsearch.search.fetch.subphase.highlight.HighlightBuilder;
 import org.elasticsearch.search.sort.SortOrder;
@@ -72,6 +74,69 @@ public class ElasticsearchRepo {
         }catch (Exception ex){
             log.error("",ex);
         }
+    }
+
+    public void updateLikeCount(String id){
+        try {
+            UpdateRequest updateRequest = new UpdateRequest()
+                    .script(new Script("ctx._source.likeCount+=1"));
+
+            updateRequest.index(BIBLEMEDIAINDEX);
+            updateRequest.id(id);
+            esClient.getClient().update(updateRequest, RequestOptions.DEFAULT);
+        }catch (Exception ex){
+            log.error("",ex);
+        }
+    }
+    public void updateViewCount(String id){
+        try {
+            UpdateRequest updateRequest = new UpdateRequest()
+                    .script(new Script("ctx._source.viewCount+=1"));
+
+            updateRequest.index(BIBLEMEDIAINDEX);
+            updateRequest.id(id);
+            esClient.getClient().update(updateRequest, RequestOptions.DEFAULT);
+        }catch (Exception ex){
+            log.error("",ex);
+        }
+    }
+
+    public void updateDislikeCount(String id){
+        try {
+            UpdateRequest updateRequest = new UpdateRequest()
+                    .script(new Script("ctx._source.dislike+=1"));
+
+            updateRequest.index(BIBLEMEDIAINDEX);
+            updateRequest.id(id);
+            esClient.getClient().update(updateRequest, RequestOptions.DEFAULT);
+        }catch (Exception ex){
+            log.error("",ex);
+        }
+    }
+
+
+    public SearchResponse searchMediaById(String id){
+        SearchSourceBuilder searchSourceBuilder;
+        org.elasticsearch.action.search.SearchRequest req = null;
+        searchSourceBuilder = new SearchSourceBuilder();
+        BoolQueryBuilder boolQuery = QueryBuilders.boolQuery();
+        TermQueryBuilder bookTermQueryBuilder = QueryBuilders.termQuery("_id",id);
+
+        boolQuery.must(bookTermQueryBuilder);
+
+        searchSourceBuilder.query(boolQuery);
+        searchSourceBuilder.highlighter(new HighlightBuilder().field("*").requireFieldMatch(false)
+                .highlighterType("unified"));
+        String[] indices ={BIBLEMEDIAINDEX};
+        req = new org.elasticsearch.action.search.SearchRequest(indices, searchSourceBuilder);
+
+        SearchResponse searchRes = null;
+        try {
+            searchRes = this.esClient.getClient().search(req, RequestOptions.DEFAULT);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return searchRes;
     }
 
     public SearchResponse searchMediaByBookIdAndChapterNumber(String bookId,String chapterName){

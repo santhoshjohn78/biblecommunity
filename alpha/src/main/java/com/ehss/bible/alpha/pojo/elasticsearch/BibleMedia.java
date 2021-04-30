@@ -2,6 +2,7 @@ package com.ehss.bible.alpha.pojo.elasticsearch;
 
 import com.google.gson.Gson;
 import lombok.*;
+import org.springframework.data.annotation.Id;
 
 @Getter
 @Setter
@@ -11,6 +12,7 @@ import lombok.*;
 @EqualsAndHashCode
 public class BibleMedia {
 
+    String id;
     String key;
     Integer verseNumber;
     String verseText;
@@ -21,6 +23,7 @@ public class BibleMedia {
     String[] tags;
     String mediaUrl;
     Long likeCount;
+    Long dislike;
     Long viewCount;
 
     @Override

@@ -41,6 +41,7 @@ public class MediaService {
                 BibleMedia bibleMedia = BibleMedia.builder().bookId(annotation.getBookId()).mediaUrl(mediaUrls)
                     .bookName(annotation.getBookName()).chapterName(annotation.getChapterId()).chapterNumber(Integer.parseInt(annotation.getChapterId()))
                         .verseNumber(annotation.getVerseNumber()).verseText(annotation.getVerseText()).key(encodedUrl)
+                        .dislike(0L).likeCount(0L).viewCount(0L)
                         .tags(annotation.getTags()).build();
                 bibleMediaList.add(bibleMedia);
 
@@ -58,9 +59,11 @@ public class MediaService {
         SearchResponse searchResponse =this.elasticsearchRepo.searchMediaByBookIdAndChapterNumber(bookId,chapterName);
         for(SearchHit searchHit:searchResponse.getHits().getHits()){
             Map<String,Object> searchMap =searchHit.getSourceAsMap();
-            BibleMedia bibleMedia = BibleMedia.builder().key(searchMap.get("key").toString()).verseText(searchMap.get("verseText").toString())
+            BibleMedia bibleMedia = BibleMedia.builder().id(searchHit.getId()).key(searchMap.get("key").toString()).verseText(searchMap.get("verseText").toString())
                     .bookId(searchMap.get("bookId").toString()).bookName(searchMap.get("bookName").toString()).mediaUrl(searchMap.get("mediaUrl").toString())
                     .chapterName(searchMap.get("chapterName").toString()).chapterNumber(Integer.parseInt(searchMap.get("chapterNumber").toString()))
+                    .likeCount(Long.parseLong(searchMap.get("likeCount").toString())).dislike(Long.parseLong(searchMap.get("dislike").toString()))
+                    .viewCount(Long.parseLong(searchMap.get("viewCount").toString()))
                     //.tags(searchMap.get("tags"))
                     .build();
             bibleMediaList.add(bibleMedia);
@@ -68,5 +71,15 @@ public class MediaService {
         return bibleMediaList;
     }
 
+    public void likeMedia(String id,String key,String userId){
+       elasticsearchRepo.updateLikeCount(id);
+    }
+
+    public void disLikeMedia(String id,String key,String userId){
+        elasticsearchRepo.updateDislikeCount(id);
+    }
+    public void updateViewMediaCount(String id,String key,String userId){
+        elasticsearchRepo.updateViewCount(id);
+    }
 
 }

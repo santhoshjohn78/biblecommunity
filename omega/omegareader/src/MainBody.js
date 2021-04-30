@@ -14,6 +14,7 @@ import {CirclePicker,TwitterPicker,SwatchesPicker } from 'react-color';
 import {useSelector,useDispatch} from 'react-redux';
 import Scrollbar from 'react-scrollbars-custom';
 import styled from 'styled-components';
+
 import { gotoPageAction } from './actions'; 
 
 
@@ -22,6 +23,9 @@ function MainBody(props){
  
         
     const config = new Config();
+
+    const annotationUrl = config.ANNOTATION_URL+config.DEFAULT_USER_ID;
+    
     const bookid = useSelector(state=>state.page.bookId);
     const bookName = useSelector(state=>state.page.bookName);
     const pageurl = useSelector(state=>state.page.pageurl);
@@ -52,7 +56,11 @@ function MainBody(props){
     verseRefs.current = [];
     
    
-        
+    const getRequestOptions = {
+      method: 'GET',
+      headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+      
+    }    
     
     const addtoverseRefs = (el) =>{
        
@@ -75,10 +83,28 @@ function MainBody(props){
                             return data.body;
                         })
                         .then((data) => { 
-                            dispatch(gotoPageAction(config.SAMPLE_PAGE_URL,bookid,bookName,1,data,data.paragraphs,50,{},1));
                             
+                            fetch(annotationUrl+"/book/"+bookid+"/chapter/"+1,getRequestOptions)
+                            .then((response) =>{ 
+                                  return response.json()})
+                            .then((data1)=>{
+                              console.log(data.paragraphs);
+                              var colorMap = new Map();
+                              for(let k=0;k<data1.length;k++){
+                                colorMap.set(""+data1[k].verseNumber,data1[k].highlightColor);
+                              } 
+                                for(let i =0;i<data.paragraphs.length;i++){
+                                  for(let j=0;j<data.paragraphs[i].spans.length;j++){
+                                    data.paragraphs[i].spans[j].annotationColor=colorMap.get(""+data.paragraphs[i].spans[j].value);
+                                  }
+                                }
+                              
+                              dispatch(gotoPageAction(config.SAMPLE_PAGE_URL,bookid,bookName,1,data,data.paragraphs,50,{},1));
+                            });
                         }) ;
-  
+
+
+        
                     
    },[]);
   
@@ -93,9 +119,28 @@ function MainBody(props){
                                 return data.body;
                             })
                               .then((data) => { 
-                                 
-                                  dispatch(gotoPageAction(pageurl,bookid,bookName,
-                                    currentChapterNo,data,data.paragraphs,-1,{},currentChapterNo));
+                                fetch(annotationUrl+"/book/"+bookid+"/chapter/"+currentChapterNo,getRequestOptions)
+                                .then((response) =>{ 
+                                      return response.json()})
+                                .then((data1)=>{
+                                  console.log(data.paragraphs);
+                                  var colorMap = new Map();
+                                  for(let k=0;k<data1.length;k++){
+                                    colorMap.set(""+data1[k].verseNumber,data1[k].highlightColor);
+                                  } 
+                                    for(let i =0;i<data.paragraphs.length;i++){
+                                      for(let j=0;j<data.paragraphs[i].spans.length;j++){
+                                        data.paragraphs[i].spans[j].annotationColor=colorMap.get(""+data.paragraphs[i].spans[j].value);
+                                      }
+                                    }
+                                  
+                                    dispatch(gotoPageAction(pageurl,bookid,bookName,
+                                      currentChapterNo,data,data.paragraphs,-1,{},currentChapterNo));
+                                      
+                                });
+
+                                  
+                                  
                                 }) ;
 
     }

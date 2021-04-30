@@ -31,7 +31,7 @@ public class EpubTOCService {
         XmlMapper xmlMapper = new XmlMapper();
         XMLInputFactory xmlif = XMLInputFactory.newInstance();
         String toc=versionService.getTocpath().get(version);
-
+        log.info("TOC path="+toc);
         XMLStreamReader xmlStreamReader = xmlif.createXMLStreamReader(new FileInputStream(getClass().getClassLoader()
                 .getResource(toc).getFile()));
         Ncx ncx = xmlMapper.readValue(xmlStreamReader, Ncx.class);

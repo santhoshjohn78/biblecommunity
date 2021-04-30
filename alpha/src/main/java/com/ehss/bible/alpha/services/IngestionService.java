@@ -48,7 +48,7 @@ public class IngestionService {
         log.info("inside ingestion service");
         requestMap.put(versionId,uuid.toString());
         try {
-            VirtualTOC vtoc = this.virtualTOCService.constructVirtualTOC("asv");
+            VirtualTOC vtoc = this.virtualTOCService.constructVirtualTOC(versionId);
             List<Book> bookList = vtoc.getBookList();
 
             for(Book book:bookList){

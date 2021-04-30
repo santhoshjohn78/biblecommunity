@@ -26,6 +26,8 @@ class Config {
 
     MEDIASEARCH_URL = "http://localhost:8080"+"/api/bible/search/media";
 
+    
+    MEDIA_URL = "http://localhost:8080"+"/api/media/";
 
     DEFAULT_USER_ID = "123456";
 

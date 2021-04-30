@@ -54,7 +54,7 @@ function BookMarksComponent(props){
         
     },[]);
     
-    const handleOnDeleteClick = (bookId) =>{
+  const handleOnDeleteClick = (bookId) =>{
       console.log("Delete bookmark "+bookId);
       
       fetch(url+"/"+bookId,deleteBookmarkRequestOption)
