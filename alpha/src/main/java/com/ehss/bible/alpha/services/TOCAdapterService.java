@@ -22,7 +22,7 @@ public class TOCAdapterService {
         this.epubTOCService = epubTOCService;
     }
 
-    public VirtualTOC toVirtualTOC(RootTOC rootTOC) throws Exception{
+    public VirtualTOC toVirtualTOC(String version,RootTOC rootTOC) throws Exception{
         VirtualTOC vtoc = new VirtualTOC();
         List<Book> bookList = new ArrayList<>();
 
@@ -33,7 +33,7 @@ public class TOCAdapterService {
             book.setTitle(navPoint.getNavLabel().getText());
             book.setUrl(navPoint.getContent().getSrc());
 
-            ChapterHtml chapterHtml = epubTOCService.getChapterToc(book.getUrl());
+            ChapterHtml chapterHtml = epubTOCService.getChapterToc(version,book.getUrl());
             List<Section> sectionList = new ArrayList<>();
             for(Anchor anchor:chapterHtml.getBody().getPages()){
                 Section section = new Section();
@@ -60,11 +60,11 @@ public class TOCAdapterService {
      * @return
      */
 
-    public List<BibleVerse> toBibleVerseList(String bookName,String bookId,Section section) throws Exception {
+    public List<BibleVerse> toBibleVerseList(String version,String bookName,String bookId,Section section) throws Exception {
         List<BibleVerse> bibleVerseList = new ArrayList<>();
 
         String pageurl = section.getUrl();
-        PageHtml pageHtml = this.epubTOCService.getPage(pageurl);
+        PageHtml pageHtml = this.epubTOCService.getPage(version,pageurl);
         for (Paragraph paragraph:pageHtml.getBody().getParagraphs()) {
             for (Span span:paragraph.getSpans()){
                 BibleVerse bibleVerse = new BibleVerse();
@@ -73,8 +73,8 @@ public class TOCAdapterService {
                 bibleVerse.setBookId(bookId);
                 bibleVerse.setChapterName(section.getTitle());
                 bibleVerse.setChapterNumber(Integer.parseInt(section.getId()));
-                bibleVerse.setBibleVersionId("asv");
-                bibleVerse.setBibleVersionName("American Standard Version");
+                bibleVerse.setBibleVersionId(version);
+                bibleVerse.setBibleVersionName(version);
                 String key = bookName+"_"+section.getTitle()+"_"+span.getValue();
                 bibleVerse.setKey(key);
                 bibleVerse.setAnchorId(span.getId());

@@ -17,7 +17,7 @@ import java.util.List;
 
 @RestController
 @CrossOrigin
-@RequestMapping("/api/bible/search")
+@RequestMapping("/api/bible")
 @Slf4j
 public class SearchController {
 
@@ -27,21 +27,24 @@ public class SearchController {
     @Autowired
     MediaService mediaService;
 
-    @GetMapping(path="/page/{pageUrl}",produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(path="/version/{versionId}/search/page/{pageUrl}",produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public ResponseEntity<SearchResponse> getVersesForPage(@PathVariable String pageUrl) throws Exception{
-        return new ResponseEntity( searchService.searchVerseByPage(pageUrl), HttpStatus.OK);
+    public ResponseEntity<SearchResponse> getVersesForPage(@PathVariable String versionId,
+                                                           @PathVariable String pageUrl) throws Exception{
+        return new ResponseEntity( searchService.searchVerseByPage(versionId,pageUrl), HttpStatus.OK);
     }
 
-    @GetMapping(path="/v1",produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(path="/version/{versionId}/search/v1",produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public ResponseEntity<SearchResponse> getVersesByMatches(@RequestParam(name = "q",required = true) String query){
-        return new ResponseEntity( searchService.searchVerseByMatch(query), HttpStatus.OK);
+    public ResponseEntity<SearchResponse> getVersesByMatches(
+            @PathVariable String versionId,@RequestParam(name = "q",required = true) String query){
+        return new ResponseEntity( searchService.searchVerseByMatch(versionId,query), HttpStatus.OK);
     }
 
-    @GetMapping(path="/media/{bookId}/{chapterName}",produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(path="/search/media/{bookId}/{chapterName}",produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public ResponseEntity<List<BibleMedia>> getMediaByBookIdAndChapterNumber(@PathVariable String bookId, @PathVariable String chapterName){
+    public ResponseEntity<List<BibleMedia>> getMediaByBookIdAndChapterNumber(@PathVariable String bookId,
+                                                                             @PathVariable String chapterName){
         return new ResponseEntity(mediaService.searchMediaByBookIdAndChapter(bookId,chapterName),HttpStatus.OK);
     }
 }

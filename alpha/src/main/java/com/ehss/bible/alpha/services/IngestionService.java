@@ -53,7 +53,7 @@ public class IngestionService {
 
             for(Book book:bookList){
                 for (Section section:book.getSectionList()){
-                    List<BibleVerse> bibleVerseList= this.tocAdapterService.toBibleVerseList(book.getTitle(),book.getId(),section);
+                    List<BibleVerse> bibleVerseList= this.tocAdapterService.toBibleVerseList(versionId,book.getTitle(),book.getId(),section);
                     elasticsearchRepo.indexData(bibleVerseList,"bibleverse");
                 }
             }

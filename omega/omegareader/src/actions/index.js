@@ -38,3 +38,11 @@ export const changeThemeColorAction = (bgColor,fontColor) => {
         fontColor
     }
 }
+
+export const changeVersionAction = (version) => {
+
+    return {
+        type: "VERSION",
+        version
+    }
+}

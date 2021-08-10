@@ -21,7 +21,7 @@ public class VirtualTOCService {
 
     @Cacheable("VirtualTOC")
     public VirtualTOC constructVirtualTOC(String versionId) throws Exception{
-        return tocAdapterService.toVirtualTOC(epubTOCService.getToc(versionId));
+        return tocAdapterService.toVirtualTOC(versionId,epubTOCService.getToc(versionId));
     }
 
 

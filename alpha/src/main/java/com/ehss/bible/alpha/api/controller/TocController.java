@@ -47,17 +47,17 @@ public class TocController {
         return new ResponseEntity(epubTocService.getToc(versionId), HttpStatus.OK);
     }
 
-    @GetMapping(path = "/epub/chapter/{chapterName}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(path = "/epub/version/{versionId}/chapter/{chapterName}", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public ResponseEntity<ChapterHtml> getEpubChapterToc(@PathVariable String chapterName) throws Exception{
-        return new ResponseEntity(epubTocService.getChapterToc(chapterName), HttpStatus.OK);
+    public ResponseEntity<ChapterHtml> getEpubChapterToc(@PathVariable String versionId,@PathVariable String chapterName) throws Exception{
+        return new ResponseEntity(epubTocService.getChapterToc(versionId,chapterName), HttpStatus.OK);
     }
 
 
-    @GetMapping(path = "/epub/page/{pageUrl}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(path = "/epub/version/{versionId}/page/{pageUrl}", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public ResponseEntity<PageHtml> getPageHtml(@PathVariable String pageUrl) throws Exception{
-        return new ResponseEntity(epubTocService.getPage(pageUrl), HttpStatus.OK);
+    public ResponseEntity<PageHtml> getPageHtml(@PathVariable String versionId,@PathVariable String pageUrl) throws Exception{
+        return new ResponseEntity(epubTocService.getPage(versionId,pageUrl), HttpStatus.OK);
     }
 
 }

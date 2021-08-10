@@ -13,7 +13,7 @@ class App extends React.Component{
 
   constructor(props){
     super(props);
-    
+    require('dotenv').config();
   }
 
   handleOnTOCClick = () => {

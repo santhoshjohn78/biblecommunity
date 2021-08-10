@@ -1,5 +1,5 @@
 
-const setFontSizeReducer = (state=25, action) =>{
+const setFontSizeReducer = (state=15, action) =>{
     switch (action.type){
         case "FONTSIZE":
             return action.size;

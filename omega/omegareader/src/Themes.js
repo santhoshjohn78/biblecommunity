@@ -15,7 +15,7 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
  import ListGroup from 'react-bootstrap/ListGroup';
 // import ListGroupItem from 'react-bootstrap/ListGroupItem';
-import { changeFontSizeAction,changeFontFamilyAction,changeThemeColorAction } from './actions'; 
+import { changeFontSizeAction,changeFontFamilyAction,changeThemeColorAction,changeVersionAction } from './actions'; 
 import {useSelector,useDispatch} from 'react-redux';
 
 import styled from 'styled-components';
@@ -104,39 +104,63 @@ function Themes(props){
         <Modal.Body>
         <Container  fluid="true">
          
-         <Row>
+        <Row>
          
-           <Col sm={12}>
-         <h5>Font Size</h5>
-         <RangeSlider
+          <Col sm={6}>
+            <h5>Font Size</h5>
+            <RangeSlider
             value={fontSliderValue} min={minValue} max={maxValue}
             onChange={handleSliderChange}
             />
-            </Col>
-            </Row>
-            <Row><Col sm={12}><hr></hr></Col></Row>
-            <Row>
-
-            <Col sm={6}>
-            
-          <h5>Color Mode</h5>
-          <ButtonGroup toggle>
-            {radios.map((radio, idx) => (
-              <ToggleButton
-                key={idx}
-                type="radio"
-                variant="outline-dark"
-                name="radio"
-                value={radio.value}
-                checked={radioValue === radio.value}
-                onChange={(e) => {handleThemeColorChange(e)}}
-              >
-                {radio.name}
-              </ToggleButton>
-            ))}
-          
-          </ButtonGroup>
           </Col>
+          <Col sm={6}>
+            
+            <h5>Color Mode</h5>
+            <ButtonGroup toggle>
+              {radios.map((radio, idx) => (
+                <ToggleButton
+                  key={idx}
+                  type="radio"
+                  variant="outline-dark"
+                  name="radio"
+                  value={radio.value}
+                  checked={radioValue === radio.value}
+                  onChange={(e) => {handleThemeColorChange(e)}}
+                >
+                  {radio.name}
+                </ToggleButton>
+              ))}
+            
+            </ButtonGroup>
+            </Col>
+  
+          </Row>
+          <Row><Col sm={12}><hr></hr></Col></Row>
+          <Row>
+          <Col sm={6}>
+          <ListGroup>
+           <h5>Version</h5>
+           <ListGroup.Item eventKey="asv" onClick={(e)=>{dispatch(changeVersionAction("asv"));}} action variant="dark">
+              American Standard Version
+            </ListGroup.Item>
+           <ListGroup.Item eventKey="cpdv" onClick={(e)=>{dispatch(changeVersionAction("cpdv"));}}  action variant="light">
+              Catholic Public Domain Version
+            </ListGroup.Item>
+           <ListGroup.Item eventKey="darby" onClick={(e)=>{dispatch(changeVersionAction("darby"));}}  action variant="dark">
+              Darby Translation John Nelson 
+            </ListGroup.Item>
+           <ListGroup.Item eventKey="kjv" onClick={(e)=>{dispatch(changeVersionAction("kjv"));}}  action variant="light">
+              King James Version
+            </ListGroup.Item>
+            <ListGroup.Item eventKey="web" onClick={(e)=>{dispatch(changeVersionAction("web"));}}  action variant="dark">
+              World English Bible
+            </ListGroup.Item>
+            <ListGroup.Item eventKey="ylt" onClick={(e)=>{dispatch(changeVersionAction("ylt"));}}  action variant="light">
+              Youngs Literal Translations
+            </ListGroup.Item>
+          </ListGroup>
+          </Col>
+
           <Col sm={6}>
           <ListGroup>
            <h5>Font</h5>

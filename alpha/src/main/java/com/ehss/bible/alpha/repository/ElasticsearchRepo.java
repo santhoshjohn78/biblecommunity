@@ -166,7 +166,7 @@ public class ElasticsearchRepo {
 
     }
 
-    public SearchResponse searchVerseByPage(String pageUrl){
+    public SearchResponse searchVerseByPage(String version,String pageUrl){
         SearchSourceBuilder searchSourceBuilder;
         org.elasticsearch.action.search.SearchRequest req = null;
         searchSourceBuilder =new SearchSourceBuilder();
@@ -193,15 +193,16 @@ public class ElasticsearchRepo {
         return searchRes;
     }
 
-    public SearchResponse searchVerseByMatch(String text){
+    public SearchResponse searchVerseByMatch(String versionId,String text){
         SearchSourceBuilder searchSourceBuilder;
         org.elasticsearch.action.search.SearchRequest req = null;
         searchSourceBuilder =new SearchSourceBuilder();
         BoolQueryBuilder boolQuery = QueryBuilders.boolQuery();
+        TermQueryBuilder versionTermQueryBuilder = QueryBuilders.termQuery("bibleVersionId",versionId);
         MatchPhrasePrefixQueryBuilder matchPhrasePrefixQueryBuilder = QueryBuilders.matchPhrasePrefixQuery("verseText",text);
         MatchQueryBuilder matchQueryBuilder = QueryBuilders.matchQuery("verseText",text);
         matchQueryBuilder.fuzziness(1);
-
+        boolQuery.must(versionTermQueryBuilder);
         boolQuery.should(matchPhrasePrefixQueryBuilder);
         boolQuery.should(matchQueryBuilder);
         searchSourceBuilder.query(boolQuery);
@@ -222,15 +223,17 @@ public class ElasticsearchRepo {
 
     }
 
-    public SearchResponse searchVerseByBookChapterVerse(String book,String chapter,String verse){
+    public SearchResponse searchVerseByBookChapterVerse(String versionId,String book,String chapter,String verse){
         SearchSourceBuilder searchSourceBuilder;
         org.elasticsearch.action.search.SearchRequest req = null;
         searchSourceBuilder =new SearchSourceBuilder();
         BoolQueryBuilder boolQuery = QueryBuilders.boolQuery();
+        TermQueryBuilder versionTermQueryBuilder = QueryBuilders.termQuery("bibleVersionId",versionId);
         TermQueryBuilder verseTermQueryBuilder = QueryBuilders.termQuery("verseNumber",verse);
         TermQueryBuilder chapterTermQueryBuilder = QueryBuilders.termQuery("chapterNumber",chapter);
         TermQueryBuilder bookTermQueryBuilder = QueryBuilders.termQuery("bookName.keyword",book);
 
+        boolQuery.must(versionTermQueryBuilder);
         boolQuery.must(verseTermQueryBuilder);
         boolQuery.must(chapterTermQueryBuilder);
         boolQuery.must(bookTermQueryBuilder);

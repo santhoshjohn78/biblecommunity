@@ -4,6 +4,7 @@ import setPageReducer from './setPage';
 import setFontSizeReducer from './setFontSize';
 import setThemeColorReducer from './setThemeColor';
 import setFontFamilyReducer from './setFontFamily';
+import setVersionReducer from './setVersion';
 
 
 const rootReducer = combineReducers({
@@ -11,7 +12,8 @@ const rootReducer = combineReducers({
     page:setPageReducer,
     fontSize:setFontSizeReducer,
     theme:setThemeColorReducer,
-    fontFamily:setFontFamilyReducer
+    fontFamily:setFontFamilyReducer,
+    version:setVersionReducer
 });
 
 export default rootReducer;

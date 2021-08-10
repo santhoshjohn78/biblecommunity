@@ -25,11 +25,11 @@ public class SearchService {
         this.elasticsearchRepo = elasticsearchRepo;
     }
 
-    public SearchResponse searchVerseByPage(String pageUrl){
-        return this.elasticsearchRepo.searchVerseByPage(pageUrl);
+    public SearchResponse searchVerseByPage(String versionId,String pageUrl){
+        return this.elasticsearchRepo.searchVerseByPage(versionId,pageUrl);
     }
 
-    public SearchResponse searchVerseByMatch(String text){
+    public SearchResponse searchVerseByMatch(String version,String text){
         Pattern pattern = Pattern.compile(SINGLEVERSE_REGEX);
         Matcher matcher = pattern.matcher(text);
         int count = matcher.groupCount();
@@ -38,9 +38,9 @@ public class SearchService {
             String chapter = matcher.group(2);
             String verse = matcher.group(3);
             log.info("Performing query based on bible citation format: "+book+" "+chapter+":"+verse);
-            return this.elasticsearchRepo.searchVerseByBookChapterVerse(book,chapter,verse);
+            return this.elasticsearchRepo.searchVerseByBookChapterVerse(version,book,chapter,verse);
         }else {
-            return this.elasticsearchRepo.searchVerseByMatch(text);
+            return this.elasticsearchRepo.searchVerseByMatch(version,text);
         }
     }
 }

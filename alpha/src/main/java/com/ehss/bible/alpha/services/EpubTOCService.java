@@ -40,18 +40,18 @@ public class EpubTOCService {
 
     }
 
-    public ChapterHtml getChapterToc(String chapterId) throws Exception {
+    public ChapterHtml getChapterToc(String version,String chapterId) throws Exception {
         XmlMapper xmlMapper = new XmlMapper();
         XMLInputFactory xmlif = XMLInputFactory.newInstance();
-        XMLStreamReader xmlStreamReader = xmlif.createXMLStreamReader(new FileInputStream(getClass().getClassLoader().getResource("static/asv/OEBPS/"+chapterId).getFile()));
+        XMLStreamReader xmlStreamReader = xmlif.createXMLStreamReader(new FileInputStream(getClass().getClassLoader().getResource("static/"+version+"/OEBPS/"+chapterId).getFile()));
         ChapterHtml chapterHtml = xmlMapper.readValue(xmlStreamReader, ChapterHtml.class);
         return chapterHtml;
     }
 
-    public PageHtml getPage(String pageUrl) throws  Exception{
+    public PageHtml getPage(String version,String pageUrl) throws  Exception{
         XmlMapper xmlMapper = new XmlMapper();
         XMLInputFactory xmlif = XMLInputFactory.newInstance();
-        XMLStreamReader xmlStreamReader = xmlif.createXMLStreamReader(new FileInputStream(getClass().getClassLoader().getResource("static/asv/OEBPS/"+pageUrl).getFile()));
+        XMLStreamReader xmlStreamReader = xmlif.createXMLStreamReader(new FileInputStream(getClass().getClassLoader().getResource("static/"+version+"/OEBPS/"+pageUrl).getFile()));
         PageHtml pageHtml= new PageHtml();
         pageHtml.setBody(new PageBody());
         pageHtml.getBody().setParagraphs(new ArrayList<>());
@@ -70,7 +70,11 @@ public class EpubTOCService {
             if (paragraph!=null && xmlEvent == XMLStreamConstants.CHARACTERS){
                 verseText = xmlStreamReader.getText();
                 if (!verseText.startsWith("\n"))
-                    span.setVerseText(verseText);
+                    if (span.getVerseText()!=null) {
+                        span.setVerseText(span.getVerseText() + " " + verseText);
+                    }else{
+                        span.setVerseText(verseText);
+                    }
             }
 
             //Process start element.
@@ -87,6 +91,10 @@ public class EpubTOCService {
                 }
                 if (startElementStr.equalsIgnoreCase(("a"))) {
                     String id =  xmlStreamReader.getAttributeValue(0);
+                    if (paragraph==null){
+                        paragraph = new Paragraph();
+                        paragraph.setSpans(new ArrayList<>());
+                    }
 
                     if (span!=null){
                         paragraph.getSpans().add(span);
@@ -97,9 +105,11 @@ public class EpubTOCService {
                 }
                 if (startElementStr.equalsIgnoreCase(("span"))) {
                     String id =  xmlStreamReader.getElementText();
-
                     span.setValue(id);
-
+                }
+                if (startElementStr.equalsIgnoreCase(("em"))) {
+                    String emtext =  xmlStreamReader.getElementText();
+                    span.setVerseText(span.getVerseText()+" "+emtext);
                 }
 
 
@@ -115,13 +125,19 @@ public class EpubTOCService {
                     pageHtml.getBody().getParagraphs().add(paragraph);
                 }
                 if (endElementStr.equalsIgnoreCase("span")){
+                    if (paragraph==null){
+                        paragraph = new Paragraph();
+                        paragraph.setSpans(new ArrayList<>());
+                    }
                     paragraph.getSpans().add(span);
                 }
             }
             xmlStreamReader.next();
 
         };
-
+        if (pageHtml.getBody().getParagraphs().size()==0){
+            pageHtml.getBody().getParagraphs().add(paragraph);
+        }
         return pageHtml;
     }
 }

@@ -21,7 +21,7 @@ import { gotoPageAction } from './actions';
 function MainBody(props){
     
  
-        
+    
     const config = new Config();
 
     const annotationUrl = config.ANNOTATION_URL+config.DEFAULT_USER_ID;
@@ -43,6 +43,7 @@ function MainBody(props){
     const fontFamilyValue = useSelector(state=>state.fontFamily);
     const themeBgColor = useSelector(state => state.theme.bgColor);
     const themeFontColor = useSelector(state => state.theme.fontColor);
+    const bibleVersion = useSelector(state => state.version);
     const HighlightBackground = styled.p`background-color:${bgColor}`;
     const BackgroundTheme = styled.div`background-color:${themeBgColor};`;    
     const Paragraph = styled.p`font-size: ${paragraphFontSize}px;font-family: ${fontFamilyValue}; background-color:${themeBgColor}; color:${themeFontColor}`;
@@ -72,10 +73,16 @@ function MainBody(props){
     }
 
     useEffect(() =>{
-        console.log("inside use");
+     
+        console.log("getting content for version:"+bibleVersion);
         setSelectedversenum(1);
+        const version = bibleVersion;
+        console.log(process.env.REACT_APP_SAMPLE_PAGE_URL+version+"/page/01.GE.1.xhtml");
         
-        fetch(config.SAMPLE_PAGE_URL)
+        
+        const url = process.env.REACT_APP_SAMPLE_PAGE_URL+version+"/page/01.GE.1.xhtml";
+        console.log(url);
+        fetch(url)
                         .then((response) => { 
                             return response.json()
                         })
@@ -106,7 +113,7 @@ function MainBody(props){
 
         
                     
-   },[]);
+   },[bibleVersion]);
   
    const fetchPageContent = (pageurl,currentChapterNo) => {
         
