@@ -142,6 +142,16 @@ Kibana: http://localhost:5601/
 Elasticsearch: http://localhost:9200/
 
 
+## NGINX setup
+To setup NGINX for static content
+In Windows
+```
+docker run -d -p 80:80 -v C:\\xyz\\web:/usr/share/nginx/html --name my-nginx nginx
+```
+In Unix
+```
+docker run -d -p 80:80 -v /web:/usr/share/nginx/html --name my-nginx nginx
+```
 
 
 ## Built With
