@@ -1,0 +1,125 @@
+version: "3.9"
+services:
+  es01:
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.14.0
+    container_name: es01
+    environment:
+      - node.name=es01
+      - cluster.name=es-docker-cluster
+      - discovery.seed_hosts=es02,es03
+      - cluster.initial_master_nodes=es01,es02,es03
+      - bootstrap.memory_lock=true
+      - "ES_JAVA_OPTS=-Xms2048m -Xmx2048m"
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    volumes:
+      - data01:/usr/share/elasticsearch/data
+    ports:
+      - 9200:9200
+    networks:
+      - nazreen
+
+  es02:
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.14.0
+    container_name: es02
+    environment:
+      - node.name=es02
+      - cluster.name=es-docker-cluster
+      - discovery.seed_hosts=es01,es03
+      - cluster.initial_master_nodes=es01,es02,es03
+      - bootstrap.memory_lock=true
+      - "ES_JAVA_OPTS=-Xms2048m -Xmx2048m"
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    volumes:
+      - data02:/usr/share/elasticsearch/data
+    networks:
+      - nazreen
+
+  es03:
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.14.0
+    container_name: es03
+    environment:
+      - node.name=es03
+      - cluster.name=es-docker-cluster
+      - discovery.seed_hosts=es01,es02
+      - cluster.initial_master_nodes=es01,es02,es03
+      - bootstrap.memory_lock=true
+      - "ES_JAVA_OPTS=-Xms2048m -Xmx2048m"
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    volumes:
+      - data03:/usr/share/elasticsearch/data
+    networks:
+      - nazreen
+
+  kibana:
+    image: docker.elastic.co/kibana/kibana:7.14.0
+    container_name: kib01
+    ports:
+      - 5601:5601
+    environment:
+      SERVER_NAME: kibana.example.org
+      ELASTICSEARCH_HOSTS: '["http://es01:9200","http://es02:9200","http://es03:9200"]'
+    networks:
+      - nazreen
+
+  filebeat:
+    image: docker.elastic.co/beats/filebeat:7.14.0
+    container_name: filebeats
+    networks:
+      - nazreen
+    volumes:
+      - filebeat:/usr/share/filebeat/data
+    environment:
+      ELASTICSEARCH_HOSTS: '["http://es01:9200","http://es02:9200","http://es03:9200"]'
+      KIBANA_HOST: "http://kib01:5601"
+
+  mongodb:
+    image: mongo:latest
+    container_name: mongodb
+    networks:
+      - nazreen
+    ports:
+      - 27017:27017
+    volumes:
+      - mongodb_data_container:/data/db
+
+  mongo-express:
+    image: mongo-express:latest
+    container_name: mongo-express
+    networks:
+      - nazreen
+    environment:
+      - ME_CONFIG_MONGODB_SERVER=mongodb
+      - ME_CONFIG_MONGODB_PORT=27017
+      - ME_CONFIG_MONGODB_ENABLE_ADMIN=true
+    depends_on:
+      - mongodb
+    ports:
+      - "8081:8081"
+    volumes:
+      - mongodb_data_container:/data/db
+
+
+volumes:
+  mongodb_data_container:
+    driver: local
+  filebeat:
+    driver: local
+  data01:
+    driver: local
+  data02:
+    driver: local
+  data03:
+    driver: local
+
+networks:
+  nazreen:
+    driver: bridge
