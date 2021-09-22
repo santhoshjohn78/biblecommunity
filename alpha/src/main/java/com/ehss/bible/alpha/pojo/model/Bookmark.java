@@ -24,4 +24,5 @@ public class Bookmark {
     String pageNumber;
     Date bookMarkedDate;
     String formattedBookMarkedDate;
+    Boolean isLastVisitedPage;
 }

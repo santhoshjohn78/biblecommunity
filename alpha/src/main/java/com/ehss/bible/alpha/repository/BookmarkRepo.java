@@ -6,13 +6,15 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-public interface BookmarkRepo extends MongoRepository<Bookmark,String> {
+public interface BookmarkRepo extends MongoRepository<Bookmark, String> {
 
-    List<Bookmark> findByUserId(String userId);
+    List<Bookmark> findByUserIdAndIsLastVisitedPage(String userId, Boolean isLastVisitedPage);
 
-    Bookmark findByUserIdAndBookIdAndChapterId(String userId,String bookId,String chapterId);
+    Bookmark findByUserIdAndBookIdAndChapterIdAndIsLastVisitedPage(String userId, String bookId, String chapterId, Boolean isLastVisitedPage);
 
-    List<Bookmark> findDistinctByUserIdAndPageUrl(String userId,String pageUrl);
+    List<Bookmark> findDistinctByUserIdAndPageUrlAndIsLastVisitedPage(String userId, String pageUrl, Boolean isLastVisitedPage);
 
-    List<Bookmark> findByUserIdAndBookId(String userId,String bookId);
+    List<Bookmark> findByUserIdAndBookIdAndIsLastVisitedPage(String userId, String bookId, Boolean isLastVisitedPage);
+
+
 }

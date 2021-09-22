@@ -2,15 +2,12 @@ package com.ehss.bible.alpha.api.controller;
 
 import com.ehss.bible.alpha.pojo.model.Bookmark;
 import com.ehss.bible.alpha.services.BookmarkService;
-import com.ehss.bible.alpha.services.SearchService;
 import lombok.extern.slf4j.Slf4j;
-import org.elasticsearch.action.search.SearchResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import javax.validation.Valid;
 import java.util.List;
 
@@ -23,36 +20,49 @@ public class BookmarkController {
     @Autowired
     BookmarkService bookmarkService;
 
-    @PostMapping(path="/user/{userId}",produces = MediaType.APPLICATION_JSON_VALUE,consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(path = "/user/{userId}", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public ResponseEntity<Bookmark> createBookmark(@PathVariable String userId, @Valid @RequestBody Bookmark bookmark) throws Exception{
-        return new ResponseEntity(bookmarkService.createBookmark(bookmark),HttpStatus.CREATED);
+    public ResponseEntity<Bookmark> createBookmark(@PathVariable String userId, @Valid @RequestBody Bookmark bookmark) throws Exception {
+        return new ResponseEntity(bookmarkService.createBookmark(bookmark), HttpStatus.CREATED);
     }
 
-    @DeleteMapping(path="/user/{userId}/{bookmarkId}",produces = MediaType.APPLICATION_JSON_VALUE,consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(path = "/user/{userId}/pagevisit", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public ResponseEntity<Void> deleteBookmark(@PathVariable String userId,@PathVariable String bookmarkId) throws Exception{
+    public ResponseEntity<Bookmark> createLastVisitedPage(@PathVariable String userId, @Valid @RequestBody Bookmark bookmark) throws Exception {
+        return new ResponseEntity(bookmarkService.createLastVisitedPage(bookmark), HttpStatus.CREATED);
+    }
+
+    @DeleteMapping(path = "/user/{userId}/{bookmarkId}", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public ResponseEntity<Void> deleteBookmark(@PathVariable String userId, @PathVariable String bookmarkId) throws Exception {
         bookmarkService.deleteBookmark(bookmarkId);
         return new ResponseEntity(HttpStatus.OK);
     }
 
-    @GetMapping(path="/user/{userId}",produces = MediaType.APPLICATION_JSON_VALUE,consumes = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(path = "/user/{userId}", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public ResponseEntity<List<Bookmark>> getBookmark(@PathVariable String userId) throws Exception{
+    public ResponseEntity<List<Bookmark>> getBookmark(@PathVariable String userId) throws Exception {
 
-        return new ResponseEntity(bookmarkService.getBookmarks(userId),HttpStatus.OK);
+        return new ResponseEntity(bookmarkService.getBookmarks(userId), HttpStatus.OK);
     }
 
-    @GetMapping(path="/user/{userId}/book/{bookId}",produces = MediaType.APPLICATION_JSON_VALUE,consumes = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(path = "/user/{userId}/pagevisit", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public ResponseEntity<List<Bookmark>> getBookmark(@PathVariable String userId,@PathVariable String bookId) throws Exception{
+    public ResponseEntity<List<Bookmark>> getLastVisitedPage(@PathVariable String userId) throws Exception {
 
-        return new ResponseEntity(bookmarkService.getBookmarks(userId,bookId),HttpStatus.OK);
+        return new ResponseEntity(bookmarkService.getLastVisitedPage(userId), HttpStatus.OK);
     }
 
-    @GetMapping(path="/user/{userId}/book/{bookId}/chapter/{chapterId}",produces = MediaType.APPLICATION_JSON_VALUE,consumes = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(path = "/user/{userId}/book/{bookId}", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public ResponseEntity<Bookmark> getBookmark(@PathVariable String userId,@PathVariable String bookId,@PathVariable String chapterId) throws Exception{
+    public ResponseEntity<List<Bookmark>> getBookmark(@PathVariable String userId, @PathVariable String bookId) throws Exception {
+
+        return new ResponseEntity(bookmarkService.getBookmarks(userId, bookId), HttpStatus.OK);
+    }
+
+    @GetMapping(path = "/user/{userId}/book/{bookId}/chapter/{chapterId}", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public ResponseEntity<Bookmark> getBookmark(@PathVariable String userId, @PathVariable String bookId, @PathVariable String chapterId) throws Exception {
         return new ResponseEntity(bookmarkService.getBookmark(userId, bookId,chapterId),HttpStatus.OK);
     }
 

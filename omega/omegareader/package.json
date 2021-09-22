@@ -9,6 +9,7 @@
     "@trendmicro/react-sidenav": "^0.5.0",
     "bootstrap": "^4.6.0",
     "dotenv": "^9.0.0",
+    "framer-motion": "^4.1.17",
     "hashmap": "^2.4.0",
     "iframe-resizer": "^4.3.1",
     "iframe-resizer-react": "^1.1.0",
