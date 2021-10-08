@@ -33,6 +33,14 @@ export const BoldLink = styled.a`
   margin: 0 4px;
 `;
 
+export const ErrorText = styled.h5`
+  color: rgb(252, 40, 3);
+  font-weight: 500;
+  font-size: 11px;
+  margin: 0;
+  margin-top: 7px;
+`;
+
 export const Input = styled.input`
   width: 100%;
   height: 42px;

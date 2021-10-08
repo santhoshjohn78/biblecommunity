@@ -14,11 +14,15 @@ class Config {
     VTOC_URL = "http://localhost:8080" + "/api/toc/virtual/version/kjv";
 
     BASE_PAGE_URL = "http://localhost:8080" + "/api/toc/epub/version/";
+
+    DEFAULT_PAGE_URL = "01.GE.1.xhtml";
     //BASE_PAGE_URL = "http://localhost:8080"+"/api/toc/epub/version/kjv/page/";
 
     QUERY_PAGE_URL = "http://localhost:8080" + "/api/toc/pageurl/version/kjv/book/"
 
-    SAMPLE_PAGE_URL = '`http://localhost:8080/api/toc/epub/version/${version}/page/01.GE.1.xhtml`';
+    SAMPLE_PAGE_URL = 'http://localhost:8080/api/toc/epub/version/kjv/page/01.GE.1.xhtml';
+
+
 
     LAST_PAGE_URL = "http://localhost:8080" + "/api/bookmark/user/";
 
@@ -32,6 +36,10 @@ class Config {
 
 
     MEDIA_URL = "http://localhost:8080" + "/api/media/";
+
+    AUTH_URL = "http://localhost:8080" + "/api/auth/authenticate";
+
+    SIGNUP_URL = "http://localhost:8080" + "/api/auth/signup";
 
     DEFAULT_USER_ID = "123456";
 

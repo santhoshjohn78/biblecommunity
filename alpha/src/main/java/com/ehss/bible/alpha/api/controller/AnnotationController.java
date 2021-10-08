@@ -1,9 +1,7 @@
 package com.ehss.bible.alpha.api.controller;
 
 import com.ehss.bible.alpha.pojo.model.Annotation;
-import com.ehss.bible.alpha.pojo.model.Bookmark;
 import com.ehss.bible.alpha.services.AnnotationService;
-import com.ehss.bible.alpha.services.BookmarkService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -40,25 +38,25 @@ public class AnnotationController {
     @ResponseBody
     public ResponseEntity<List<Annotation>> get(@PathVariable String userId) throws Exception{
 
-        return new ResponseEntity(annotationService.getAnnotations(userId),HttpStatus.OK);
+        return new ResponseEntity(annotationService.getAnnotations(), HttpStatus.OK);
     }
 
     @GetMapping(path="/user/{userId}/book/{bookId}",produces = MediaType.APPLICATION_JSON_VALUE,consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public ResponseEntity<List<Annotation>> getAnnotations(@PathVariable String userId,@PathVariable String bookId) throws Exception{
 
-        return new ResponseEntity(annotationService.getAnnotationsByBookId(userId,bookId),HttpStatus.OK);
+        return new ResponseEntity(annotationService.getAnnotationsByBookId(bookId), HttpStatus.OK);
     }
 
     @GetMapping(path="/user/{userId}/book/{bookId}/chapter/{chapterId}",produces = MediaType.APPLICATION_JSON_VALUE,consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public ResponseEntity<List<Annotation>> getAnnotations(@PathVariable String userId,@PathVariable String bookId,@PathVariable String chapterId) throws Exception{
-        return new ResponseEntity(annotationService.getAnnotations(userId, bookId,chapterId),HttpStatus.OK);
+        return new ResponseEntity(annotationService.getAnnotations(bookId, chapterId), HttpStatus.OK);
     }
 
     @GetMapping(path="/user/{userId}/page/{pageUrl}",produces = MediaType.APPLICATION_JSON_VALUE,consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public ResponseEntity<List<Annotation>> getAnnotationsByUrl(@PathVariable String userId,@PathVariable String pageUrl) throws Exception{
-        return new ResponseEntity(annotationService.getAnnotationsByPageUrl(userId, pageUrl),HttpStatus.OK);
+        return new ResponseEntity(annotationService.getAnnotationsByPageUrl(pageUrl), HttpStatus.OK);
     }
 }

@@ -14,7 +14,7 @@ import mylogo from './mediaScriptureLogo.png';
 function Header(props) {
 
   const headerstyle = { border: '0px solid grey' }
-
+  const isLogged = useSelector(state => state.loggedIn);
   return (
 
     <Navbar bg="dark" variant="dark">
@@ -30,7 +30,9 @@ function Header(props) {
 
       </Nav>
       <Themes></Themes>
-      <BookMark></BookMark>
+      {isLogged ?
+        (<BookMark></BookMark>) : null
+      }
       <Search></Search>
       <AuthComponent></AuthComponent>
     </Navbar>

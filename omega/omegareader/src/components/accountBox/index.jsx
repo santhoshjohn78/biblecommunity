@@ -125,7 +125,7 @@ export function AccountBox(props) {
     const contextValue = { switchToSignup, switchToSignin };
 
     return (
-        <AccountContext.Provider value={contextValue}>
+        <AccountContext.Provider value={contextValue} showAuthModal={props.showAuthModal} setShowAuthModal={props.setShowAuthModel}>
             <BoxContainer>
                 <TopContainer>
                     <BackDrop
@@ -150,7 +150,7 @@ export function AccountBox(props) {
                     )}
                 </TopContainer>
                 <InnerContainer>
-                    {active === "signin" && <LoginForm />}
+                    {active === "signin" && <LoginForm onLoginRef={props.onLoginRef} />}
                     {active === "signup" && <SignupForm />}
                 </InnerContainer>
             </BoxContainer>

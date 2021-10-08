@@ -10,13 +10,14 @@ import './TOCComponent.scss';
 
 import { gotoPageAction } from '../actions';
 import { useSelector, useDispatch } from 'react-redux';
-import { useAccordionToggle } from 'react-bootstrap/AccordionToggle';
 
 function TOCComponent(props) {
 
     const config = new Config();
     const url = config.VTOC_URL;
     const annotationUrl = config.ANNOTATION_URL + config.DEFAULT_USER_ID;
+    const isLogged = useSelector(state => state.loggedIn);
+    const jwt = useSelector(state => state.jwt);
     const [toc, setToc] = useState([]);
     const [pageContent, setPageContent] = useState({});
     const [paragraphs, setParagraphs] = useState([]);
@@ -49,7 +50,7 @@ function TOCComponent(props) {
 
     const getRequestOptions = {
         method: 'GET',
-        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json', 'Authorization': `Bearer ${jwt}` }
 
     }
 
@@ -64,30 +65,41 @@ function TOCComponent(props) {
                     return data.body;
                 })
                 .then((data) => {
-                    fetch(annotationUrl + "/book/" + bookId + "/chapter/" + chapterid, getRequestOptions)
-                        .then((response) => {
-                            return response.json()
-                        })
-                        .then((data1) => {
+                    if (isLogged) {
+                        fetch(annotationUrl + "/book/" + bookId + "/chapter/" + chapterid, getRequestOptions)
+                            .then((response) => {
+                                return response.json()
+                            })
+                            .then((data1) => {
 
-                            var colorMap = new Map();
-                            for (let k = 0; k < data1.length; k++) {
-                                colorMap.set("" + data1[k].verseNumber, data1[k].highlightColor);
-                            }
-                            for (let i = 0; i < data.paragraphs.length; i++) {
-                                for (let j = 0; j < data.paragraphs[i].spans.length; j++) {
-                                    data.paragraphs[i].spans[j].annotationColor = colorMap.get("" + data.paragraphs[i].spans[j].value);
+                                var colorMap = new Map();
+                                for (let k = 0; k < data1.length; k++) {
+                                    colorMap.set("" + data1[k].verseNumber, data1[k].highlightColor);
                                 }
-                            }
+                                for (let i = 0; i < data.paragraphs.length; i++) {
+                                    for (let j = 0; j < data.paragraphs[i].spans.length; j++) {
+                                        data.paragraphs[i].spans[j].annotationColor = colorMap.get("" + data.paragraphs[i].spans[j].value);
+                                    }
+                                }
 
-                            setParagraphs(data.paragraphs);
+                                setParagraphs(data.paragraphs);
 
-                            setBookName(bookName);
-                            setBookid(bookId);
-                            setMaxValue(nofChapters);
-                            setSliderValue(chapterid);
-                            dispatch(gotoPageAction(pageurl, bookId, bookName, chapterid, data, data.paragraphs, nofChapters, {}, chapterid));
-                        });
+                                setBookName(bookName);
+                                setBookid(bookId);
+                                setMaxValue(nofChapters);
+                                setSliderValue(chapterid);
+                                dispatch(gotoPageAction(pageurl, bookId, bookName, chapterid, data, data.paragraphs, nofChapters, {}, chapterid));
+                            });
+                    } else {
+                        setParagraphs(data.paragraphs);
+
+                        setBookName(bookName);
+                        setBookid(bookId);
+                        setMaxValue(nofChapters);
+                        setSliderValue(chapterid);
+                        dispatch(gotoPageAction(pageurl, bookId, bookName, chapterid, data, data.paragraphs, nofChapters, {}, chapterid));
+                    }
+
 
                 })
         );
@@ -118,13 +130,14 @@ function TOCComponent(props) {
                                             {
                                                 element.sectionList.map(chapterelements =>
 
+                                                    <a href="#" class="badge badge-light">
 
-                                                    <Badge key={chapterelements.title} variant="secondary">
                                                         <span key={chapterelements.title} onClick={() => handleGotoPage(element.id, element.title,
                                                             chapterelements.url, chapterelements.title, chapterelements.sectionTotal)}>
                                                             {chapterelements.title}
                                                         </span>
-                                                    </Badge>
+                                                    </a>
+
 
                                                 )}</h4>
                                         </Card.Body>

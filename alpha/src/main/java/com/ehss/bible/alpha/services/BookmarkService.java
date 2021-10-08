@@ -2,7 +2,6 @@ package com.ehss.bible.alpha.services;
 
 import com.ehss.bible.alpha.pojo.model.Bookmark;
 import com.ehss.bible.alpha.repository.BookmarkRepo;
-import com.sun.java.accessibility.util.GUIInitializedListener;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,11 +18,15 @@ public class BookmarkService {
     @Autowired
     BookmarkRepo bookmarkRepo;
 
+    @Autowired
+    AuthService authService;
+
     @Transactional
     public Bookmark createBookmark(Bookmark bookmark) {
         bookmark.setId(UUID.randomUUID().toString());
         Date markedDate = new Date();
         DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
+        bookmark.setUserId(authService.getUserIdFromSecurityContext());
         String formattedDate = dateFormat.format(markedDate);
         bookmark.setFormattedBookMarkedDate(formattedDate);
         bookmark.setBookMarkedDate(markedDate);
@@ -39,6 +42,7 @@ public class BookmarkService {
         Date markedDate = new Date();
         DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
         String formattedDate = dateFormat.format(markedDate);
+        bookmark.setUserId(authService.getUserIdFromSecurityContext());
         bookmark.setFormattedBookMarkedDate(formattedDate);
         bookmark.setBookMarkedDate(markedDate);
         bookmark.setIsLastVisitedPage(true);
@@ -51,12 +55,13 @@ public class BookmarkService {
         bookmarkRepo.deleteById(id);
     }
 
-    public List<Bookmark> getBookmarks(String userId) {
-        return bookmarkRepo.findByUserIdAndIsLastVisitedPage(userId, false);
+    public List<Bookmark> getBookmarks() {
+        return bookmarkRepo.findByUserIdAndIsLastVisitedPage(authService.getUserIdFromSecurityContext(), false);
     }
 
-    public Bookmark getLastVisitedPage(String userId) {
+    public Bookmark getLastVisitedPage() {
         Bookmark bookmark = null;
+        String userId = authService.getUserIdFromSecurityContext();
         List<Bookmark> bookmarks = bookmarkRepo.findByUserIdAndIsLastVisitedPage(userId, true);
         if (bookmarks == null || bookmarks.isEmpty()) {
             bookmark = new Bookmark();
@@ -75,15 +80,16 @@ public class BookmarkService {
         return bookmark;
     }
 
-    public List<Bookmark> getBookmarks(String userId, String bookId) {
-        return bookmarkRepo.findByUserIdAndBookIdAndIsLastVisitedPage(userId, bookId, false);
+    public List<Bookmark> getBookmarks(String bookId) {
+        return bookmarkRepo.findByUserIdAndBookIdAndIsLastVisitedPage(authService.getUserIdFromSecurityContext(), bookId, false);
     }
 
-    public Bookmark getBookmark(String userId, String bookId, String chapterId) {
-        return bookmarkRepo.findByUserIdAndBookIdAndChapterIdAndIsLastVisitedPage(userId, bookId, chapterId, false);
+    public Bookmark getBookmark(String bookId, String chapterId) {
+        return bookmarkRepo.findByUserIdAndBookIdAndChapterIdAndIsLastVisitedPage(authService.getUserIdFromSecurityContext(), bookId, chapterId, false);
     }
 
-    public Bookmark getBookmark(String userId, String pageUrl) {
+    public Bookmark getBookmark(String pageUrl) {
+        String userId = authService.getUserIdFromSecurityContext();
         List<Bookmark> bookmarks = bookmarkRepo.findDistinctByUserIdAndPageUrlAndIsLastVisitedPage(userId, pageUrl, false);
         if (bookmarks != null && !bookmarks.isEmpty())
             return bookmarkRepo.findDistinctByUserIdAndPageUrlAndIsLastVisitedPage(userId, pageUrl, false).get(0);

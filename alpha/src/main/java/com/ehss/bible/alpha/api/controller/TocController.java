@@ -23,21 +23,29 @@ public class TocController {
     EpubTOCService epubTocService;
     VirtualTOCService virtualTOCService;
 
+    private static final String defaultPageUrl = "01.GE.1.xhtml";
+
     @Autowired
-    public TocController(EpubTOCService epubTocService, VirtualTOCService virtualTOCService){
+    public TocController(EpubTOCService epubTocService, VirtualTOCService virtualTOCService) {
         this.virtualTOCService = virtualTOCService;
         this.epubTocService = epubTocService;
     }
 
-    @GetMapping(path="pageurl/version/{versionId}/book/{bookId}/chapter/{chapterId}",produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(path = "pageurl/version/{versionId}/default", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public ResponseEntity<PageUrl> getPageUrl(@PathVariable String versionId,@PathVariable String bookId, @PathVariable String chapterId) throws Exception{
-        return new ResponseEntity(virtualTOCService.getPageUrlByBookAndChapter(versionId,bookId,chapterId),HttpStatus.OK);
+    public ResponseEntity<String> getDefaultPageUrl(@PathVariable String versionId, @PathVariable String bookId, @PathVariable String chapterId) throws Exception {
+        return new ResponseEntity(defaultPageUrl, HttpStatus.OK);
     }
 
-    @GetMapping(path="/virtual/version/{versionId}",produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(path = "pageurl/version/{versionId}/book/{bookId}/chapter/{chapterId}", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public ResponseEntity<RootTOC> getVitrualToc(@PathVariable String versionId) throws Exception{
+    public ResponseEntity<PageUrl> getPageUrl(@PathVariable String versionId, @PathVariable String bookId, @PathVariable String chapterId) throws Exception {
+        return new ResponseEntity(virtualTOCService.getPageUrlByBookAndChapter(versionId, bookId, chapterId), HttpStatus.OK);
+    }
+
+    @GetMapping(path = "/virtual/version/{versionId}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public ResponseEntity<RootTOC> getVitrualToc(@PathVariable String versionId) throws Exception {
         return new ResponseEntity(virtualTOCService.constructVirtualTOC(versionId), HttpStatus.OK);
     }
 

@@ -11,9 +11,11 @@ import { gotoPageAction } from '../actions';
 function BookMarksComponent(props) {
 
   const config = new Config();
+  const isLogged = useSelector(state => state.loggedIn);
   const fontFamilyValue = useSelector(state => state.fontFamily);
   const [bookMarksList, setBookMarksList] = useState([]);
   const url = config.BOOKMARK_URL + config.DEFAULT_USER_ID;
+  const jwt = useSelector(state => state.jwt);
   const dispatch = useDispatch();
   const bibleVersion = useSelector(state => state.version);
   const styles = {
@@ -40,19 +42,21 @@ function BookMarksComponent(props) {
 
   const checkBookmarkRequestOption = {
     method: 'GET',
-    headers: { 'Content-Type': 'application/json' }
+    headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${jwt}` }
   }
   const deleteBookmarkRequestOption = {
     method: 'DELETE',
-    headers: { 'Content-Type': 'application/json' }
+    headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${jwt}` }
   }
   useEffect(() => {
     console.log("list bookmarks....");
+    if (isLogged) {
+      fetch(url, checkBookmarkRequestOption).then(res => res.json())
+        .then((data) => { setBookMarksList(data); });
+    }
 
-    fetch(url, checkBookmarkRequestOption).then(res => res.json())
-      .then((data) => { setBookMarksList(data); console.log(data); });
 
-  }, []);
+  }, [bookMarksList]);
 
   const handleOnDeleteClick = (bookId) => {
     console.log("Delete bookmark " + bookId);

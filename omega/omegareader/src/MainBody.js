@@ -10,6 +10,10 @@ import RangeSlider from 'react-bootstrap-range-slider';
 import Modal from 'react-bootstrap/Modal';
 
 import { CirclePicker, TwitterPicker, SwatchesPicker } from 'react-color';
+import {
+  BoldLink,
+  MutedLink
+} from "./common";
 
 import { useSelector, useDispatch } from 'react-redux';
 import Scrollbar from 'react-scrollbars-custom';
@@ -46,15 +50,19 @@ function MainBody(props) {
   const themeBgColor = useSelector(state => state.theme.bgColor);
   const themeFontColor = useSelector(state => state.theme.fontColor);
   const bibleVersion = useSelector(state => state.version);
+  const isLogged = useSelector(state => state.loggedIn);
   const HighlightBackground = styled.p`background-color:${bgColor}`;
   const BackgroundTheme = styled.div`background-color:${themeBgColor};`;
   const Paragraph = styled.p`font-size: ${paragraphFontSize}px;font-family: ${fontFamilyValue}; background-color:${themeBgColor}; color:${themeFontColor}`;
   const Heading2 = styled.h2`font-size: ${paragraphFontSize}px;font-family: ${fontFamilyValue}; background-color:${themeBgColor}; color:${themeFontColor}`;
+  const VerseLink = styled.a`cursor: pointer; font-size: ${paragraphFontSize}px;font-family: ${fontFamilyValue}; color:${themeFontColor}`;
+  const VerseNumberLink = styled.a`font-size: ${paragraphFontSize}px;font-family: ${fontFamilyValue}; color:${themeFontColor}; font-weight: bold;`;
+
   const [annotationComment, setAnnotationComment] = useState("");
   const [annotationTags, setAnnotationTags] = useState("");
   const [annotationMediaUrl, setAnnotationMediaUrl] = useState("");
   const [annotationSharedFlag, setAnnotationSharedFlag] = useState(true);
-
+  const jwt = useSelector(state => state.jwt);
   const initColors = ['#B0BC00', '#FCB900', '#7BDCB5', '#00D084', '#F78DA7', '#2CCCE4'];
 
   const verseRefs = useRef();
@@ -63,7 +71,7 @@ function MainBody(props) {
 
   const getRequestOptions = {
     method: 'GET',
-    headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+    headers: { 'Content-Type': 'application/json', 'Accept': 'application/json', 'Authorization': `Bearer ${jwt}` },
 
   }
 
@@ -81,49 +89,60 @@ function MainBody(props) {
     console.log("getting content for version:" + bibleVersion);
     setSelectedversenum(1);
     const version = bibleVersion;
+    if (isLogged) {
+      const url = lastPageAPIUrl;
 
-    const url = lastPageAPIUrl;
-    console.log(url);
-    fetch(url, getRequestOptions)
-      .then((response) => {
-        return response.json()
-      })
-      .then((data) => {
-        const pagecontenturl = config.BASE_PAGE_URL + version + "/page/" + data.pageUrl;
-        fetch(pagecontenturl)
-          .then((response) => {
-            return response.json()
-          })
-          .then((data) => {
-            return data.body;
-          })
-          .then((data) => {
-            fetch(annotationUrl + "/book/" + bookid + "/chapter/" + 1, getRequestOptions)
-              .then((response) => {
-                return response.json();
-              })
-              .then((data1) => {
-                console.log(data.paragraphs);
-                var colorMap = new Map();
-                for (let k = 0; k < data1.length; k++) {
-                  colorMap.set("" + data1[k].verseNumber, data1[k].highlightColor);
-                }
-                for (let i = 0; i < data.paragraphs.length; i++) {
-                  for (let j = 0; j < data.paragraphs[i].spans.length; j++) {
-                    data.paragraphs[i].spans[j].annotationColor = colorMap.get("" + data.paragraphs[i].spans[j].value);
+      fetch(url, getRequestOptions)
+        .then((response) => {
+          return response.json()
+        })
+        .then((data) => {
+          const pagecontenturl = config.BASE_PAGE_URL + version + "/page/" + data.pageUrl;
+          fetch(pagecontenturl)
+            .then((response) => {
+              return response.json()
+            })
+            .then((data) => {
+              return data.body;
+            })
+            .then((data) => {
+              fetch(annotationUrl + "/book/" + bookid + "/chapter/" + 1, getRequestOptions)
+                .then((response) => {
+                  return response.json();
+                })
+                .then((data1) => {
+                  console.log(data.paragraphs);
+                  var colorMap = new Map();
+                  for (let k = 0; k < data1.length; k++) {
+                    colorMap.set("" + data1[k].verseNumber, data1[k].highlightColor);
                   }
-                }
+                  for (let i = 0; i < data.paragraphs.length; i++) {
+                    for (let j = 0; j < data.paragraphs[i].spans.length; j++) {
+                      data.paragraphs[i].spans[j].annotationColor = colorMap.get("" + data.paragraphs[i].spans[j].value);
+                    }
+                  }
 
-                dispatch(gotoPageAction(url, bookid, bookName, 1, data, data.paragraphs, 50, {}, 1));
+                  dispatch(gotoPageAction(data.pageUrl, bookid, bookName, 1, data, data.paragraphs, 50, {}, 1));
 
-                //  dispatch(gotoPageAction(pageurl,bookId,bookName,chapterid,data,data.paragraphs,-1,{},chapterid));
-              });
-          })
+                  //  dispatch(gotoPageAction(pageurl,bookId,bookName,chapterid,data,data.paragraphs,-1,{},chapterid));
+                });
+            })
 
-      });
+        });
+    } else {
+      const pagecontenturl = config.BASE_PAGE_URL + version + "/page/" + config.DEFAULT_PAGE_URL;
+      fetch(pagecontenturl)
+        .then((response) => {
+          return response.json()
+        })
+        .then((data) => {
+          return data.body;
+        })
+        .then((data) => {
+          dispatch(gotoPageAction(config.DEFAULT_PAGE_URL, bookid, bookName, 1, data, data.paragraphs, 50, {}, 1));
 
-
-
+        });
+    }
 
   }, [bibleVersion]);
 
@@ -173,7 +192,7 @@ function MainBody(props) {
 
   const requestOptions = {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
+    headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${jwt}` },
     body: JSON.stringify({
       userId: config.DEFAULT_USER_ID,
       bookId: useSelector(state => state.page.bookId),
@@ -332,8 +351,12 @@ function MainBody(props) {
                       <span onClick={() => { handleOnVerseClick(spanelements.value, spanelements.verseText); }} key={spanelements.value}
                         ref={addtoverseRefs}
                         style={{ backgroundColor: spanelements.annotationColor }}>
-                        {spanelements.value}
-                        {spanelements.verseText}
+                        <VerseNumberLink>
+                          {spanelements.value}
+                        </VerseNumberLink>
+                        <VerseLink href="#">
+                          {spanelements.verseText}
+                        </VerseLink>
                       </span>
 
 

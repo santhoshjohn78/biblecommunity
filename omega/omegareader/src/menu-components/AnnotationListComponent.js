@@ -13,6 +13,8 @@ import { gotoPageAction } from '../actions';
 function AnnotationListComponent(props) {
 
   const config = new Config();
+  const jwt = useSelector(state => state.jwt);
+  const isLogged = useSelector(state => state.loggedIn);
   const fontFamilyValue = useSelector(state => state.fontFamily);
   const [bgColor, setBgColor] = useState();
   const [lgShow, setLgShow] = useState(false);
@@ -35,18 +37,21 @@ function AnnotationListComponent(props) {
 
   const getAnnotationRequestOption = {
     method: 'GET',
-    headers: { 'Content-Type': 'application/json' }
+    headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${jwt}` }
   }
 
   const deleteAnnotationRequestOption = {
     method: 'DELETE',
-    headers: { 'Content-Type': 'application/json' }
+    headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${jwt}` }
   }
 
   useEffect(() => {
-    fetch(url, getAnnotationRequestOption).then(res => res.json())
-      .then((data) => { setAnnotationList(data); console.log(data); });
-  }, []);
+    if (isLogged) {
+      fetch(url, getAnnotationRequestOption).then(res => res.json())
+        .then((data) => { setAnnotationList(data); console.log(data); });
+    }
+
+  }, [annotationList]);
 
   const handleOnDeleteClick = (annotationId) => {
     console.log("Delete Annotation " + annotationId);

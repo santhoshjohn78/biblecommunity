@@ -7,7 +7,7 @@
 		<artifactId>root</artifactId>
 		<version>1.0</version>
 	</parent>
-	<groupId>com.ehss.bible</groupId>
+
 	<artifactId>alpha</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>alpha</name>
@@ -81,7 +81,20 @@
 			<artifactId>lombok</artifactId>
 			<scope>provided</scope>
 		</dependency>
-
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-security</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>io.jsonwebtoken</groupId>
+			<artifactId>jjwt</artifactId>
+			<version>0.9.1</version>
+		</dependency>
+		<dependency>
+			<groupId>javax.xml.bind</groupId>
+			<artifactId>jaxb-api</artifactId>
+			<version>2.3.0</version>
+		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>

@@ -1,4 +1,18 @@
-export const gotoPageAction = (pageurl,bookId,bookName,chapterId,pageContent,paragraphs,totalPages,verseProps,currentPageNo) =>{
+export const saveJwtAction = (jwtString) => {
+    return {
+        type: "JWTSAVE",
+        jwtString
+    }
+}
+
+export const loggedInAction = (isLoggedIn) => {
+    return {
+        type: "SIGN_IN",
+        isLoggedIn
+    }
+}
+
+export const gotoPageAction = (pageurl, bookId, bookName, chapterId, pageContent, paragraphs, totalPages, verseProps, currentPageNo) => {
     return {
         type: "GOTO",
         pageurl,
@@ -10,7 +24,7 @@ export const gotoPageAction = (pageurl,bookId,bookName,chapterId,pageContent,par
         totalPages,
         verseProps,
         currentPageNo
-        
+
     }
 }
 
@@ -30,7 +44,7 @@ export const changeFontFamilyAction = (font) => {
     }
 }
 
-export const changeThemeColorAction = (bgColor,fontColor) => {
+export const changeThemeColorAction = (bgColor, fontColor) => {
 
     return {
         type: "THEMECOLOR",

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Navbar from 'react-bootstrap/Navbar';
 import Nav from 'react-bootstrap/Nav';
 import Modal from 'react-bootstrap/Modal';
@@ -49,9 +49,14 @@ const AppContainer = styled.div`
 function AuthComponent(props) {
 
     const [showAuthModal, setShowAuthModal] = useState(false);
-    const isLogged = useSelector(state => state.isLogged);
+    const isLogged = useSelector(state => state.loggedIn);
 
+    const onLogin = () => {
+        setShowAuthModal(false);
+    }
     const [fullscreen, setFullscreen] = useState(true);
+
+    const [showLoginButton, setShowLoginButton] = useState(true);
 
     const handleOnclick = () => {
         setShowAuthModal(prev => !prev);
@@ -59,7 +64,7 @@ function AuthComponent(props) {
 
     return (
         <div>
-            {isLogged ? <Button onClick={handleOnclick} >logout</Button> : <Button onClick={handleOnclick} variant="outline-info">Login</Button>}
+            {isLogged == false ? (<Button onClick={handleOnclick} variant="outline-info">Sign In</Button>) : (<Button onClick={handleOnclick} variant="outline-success">Sign Out</Button>)}
             {showAuthModal ? (
                 <Modal dialogClassName="fullscreen-modal"
                     show={showAuthModal}
@@ -69,7 +74,7 @@ function AuthComponent(props) {
 
 
                     <AppContainer >
-                        <AccountBox showAuthModal={showAuthModal} setShowAuthModal={setShowAuthModal} />
+                        <AccountBox showAuthModal={showAuthModal} onLoginRef={onLogin} />
                     </AppContainer>
 
                 </Modal>

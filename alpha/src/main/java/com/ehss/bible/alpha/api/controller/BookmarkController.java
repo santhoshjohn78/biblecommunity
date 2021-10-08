@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
 import javax.validation.Valid;
 import java.util.List;
 
@@ -43,33 +44,33 @@ public class BookmarkController {
     @ResponseBody
     public ResponseEntity<List<Bookmark>> getBookmark(@PathVariable String userId) throws Exception {
 
-        return new ResponseEntity(bookmarkService.getBookmarks(userId), HttpStatus.OK);
+        return new ResponseEntity(bookmarkService.getBookmarks(), HttpStatus.OK);
     }
 
     @GetMapping(path = "/user/{userId}/pagevisit", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public ResponseEntity<List<Bookmark>> getLastVisitedPage(@PathVariable String userId) throws Exception {
 
-        return new ResponseEntity(bookmarkService.getLastVisitedPage(userId), HttpStatus.OK);
+        return new ResponseEntity(bookmarkService.getLastVisitedPage(), HttpStatus.OK);
     }
 
     @GetMapping(path = "/user/{userId}/book/{bookId}", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public ResponseEntity<List<Bookmark>> getBookmark(@PathVariable String userId, @PathVariable String bookId) throws Exception {
 
-        return new ResponseEntity(bookmarkService.getBookmarks(userId, bookId), HttpStatus.OK);
+        return new ResponseEntity(bookmarkService.getBookmarks(bookId), HttpStatus.OK);
     }
 
     @GetMapping(path = "/user/{userId}/book/{bookId}/chapter/{chapterId}", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public ResponseEntity<Bookmark> getBookmark(@PathVariable String userId, @PathVariable String bookId, @PathVariable String chapterId) throws Exception {
-        return new ResponseEntity(bookmarkService.getBookmark(userId, bookId,chapterId),HttpStatus.OK);
+        return new ResponseEntity(bookmarkService.getBookmark(bookId, chapterId), HttpStatus.OK);
     }
 
     @GetMapping(path="/user/{userId}/page/{pageUrl}",produces = MediaType.APPLICATION_JSON_VALUE,consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public ResponseEntity<Bookmark> getBookmarkByUrl(@PathVariable String userId,@PathVariable String pageUrl) throws Exception{
-        Bookmark bookmark = bookmarkService.getBookmark(userId, pageUrl);
+        Bookmark bookmark = bookmarkService.getBookmark(pageUrl);
         if (bookmark!=null)
             return new ResponseEntity(bookmark,HttpStatus.OK);
         else
