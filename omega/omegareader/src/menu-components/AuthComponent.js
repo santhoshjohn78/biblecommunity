@@ -10,7 +10,9 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 
 import { useSelector, useDispatch } from 'react-redux';
-import { gotoPageAction } from '../actions';
+import { saveJwtAction, loggedInAction } from '../actions';
+
+
 import styled from 'styled-components';
 import { AccountBox } from "../components/accountBox";
 import '../common.scss';
@@ -50,6 +52,7 @@ function AuthComponent(props) {
 
     const [showAuthModal, setShowAuthModal] = useState(false);
     const isLogged = useSelector(state => state.loggedIn);
+    const dispatch = useDispatch();
 
     const onLogin = () => {
         setShowAuthModal(false);
@@ -62,9 +65,16 @@ function AuthComponent(props) {
         setShowAuthModal(prev => !prev);
     }
 
+    const handleOnSignOutclick = () => {
+        localStorage.removeItem("accessToken");
+        localStorage.removeItem("refreshToken");
+        dispatch(saveJwtAction(null));
+        dispatch(loggedInAction(false))
+    }
+
     return (
         <div>
-            {isLogged == false ? (<Button onClick={handleOnclick} variant="outline-info">Sign In</Button>) : (<Button onClick={handleOnclick} variant="outline-success">Sign Out</Button>)}
+            {isLogged == false ? (<Button onClick={handleOnclick} variant="outline-info">Sign In</Button>) : (<Button onClick={handleOnSignOutclick} variant="outline-success">Sign Out</Button>)}
             {showAuthModal ? (
                 <Modal dialogClassName="fullscreen-modal"
                     show={showAuthModal}

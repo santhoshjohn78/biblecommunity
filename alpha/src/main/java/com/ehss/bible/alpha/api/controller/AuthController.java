@@ -53,7 +53,8 @@ public class AuthController {
             throw new Exception("Bad credentials", badCredentialsException);
         }
         UserDetails userDetails = userService.loadUserByUsername(authRequest.getUserName());
-        String jwtString = jwtUtils.generateToken(userDetails);
-        return ResponseEntity.ok(new AuthResponse(jwtString));
+        String jwtString = jwtUtils.generateAccessToken(userDetails);
+        String refreshToken = jwtUtils.createRefreshToken(userDetails.getUsername());
+        return ResponseEntity.ok(new AuthResponse(jwtString, refreshToken));
     }
 }

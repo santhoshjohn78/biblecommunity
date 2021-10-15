@@ -53,8 +53,9 @@ export function LoginForm(props) {
             return response.json();
         })
             .then((data) => {
-
-                dispatch(saveJwtAction(data.jwtString));
+                localStorage.setItem("accessToken", data.accessToken);
+                localStorage.setItem("refreshToken", data.refreshToken);
+                dispatch(saveJwtAction(data.accessToken));
                 dispatch(loggedInAction(true))
                 setShowDialog(false);
                 props.onLoginRef();

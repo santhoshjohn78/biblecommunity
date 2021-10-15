@@ -19,8 +19,10 @@ public class JwtUtils {
 
     @Value("${app.jwtSecret")
     private String jwtSecret;
-    @Value("${app.jwtExpirationMs}")
-    private int jwtExpirationMs;
+    @Value("${app.jwtAccessTokenExpirationDays}")
+    private int jwtAccessTokenExpirationDays;
+    @Value("${app.jwtRefreshTokenExpirationDays}")
+    private int jwtRefreshTokenExpirationDays;
 
     private Claims extractAllClaims(String token) {
         return Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(token).getBody();
@@ -35,9 +37,9 @@ public class JwtUtils {
         return extractExpiration(token).before(new Date());
     }
 
-    public String generateToken(UserDetails userDetails) {
+    public String generateAccessToken(UserDetails userDetails) {
         Map<String, Object> claims = new HashMap<>();
-        return createToken(claims, userDetails.getUsername());
+        return createAccessToken(claims, userDetails.getUsername());
     }
 
     public String extractUsername(String token) {
@@ -50,10 +52,17 @@ public class JwtUtils {
 
     }
 
-    public String createToken(Map<String, Object> claims, String subject) {
+    public String createAccessToken(Map<String, Object> claims, String subject) {
         return Jwts.builder().setClaims(claims).setSubject(subject)
                 .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + jwtExpirationMs))
+                .setExpiration(new Date(System.currentTimeMillis() + jwtAccessTokenExpirationDays * 60 * 60 * 1000 * 24))
+                .signWith(SignatureAlgorithm.HS256, jwtSecret).compact();
+    }
+
+    public String createRefreshToken(String subject) {
+        return Jwts.builder().setSubject(subject)
+                .setIssuedAt(new Date(System.currentTimeMillis()))
+                .setExpiration(new Date(System.currentTimeMillis() + jwtRefreshTokenExpirationDays * 60 * 60 * 1000 * 24))
                 .signWith(SignatureAlgorithm.HS256, jwtSecret).compact();
     }
 
