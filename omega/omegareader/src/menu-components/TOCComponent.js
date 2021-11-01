@@ -19,6 +19,7 @@ function TOCComponent(props) {
     const isLogged = useSelector(state => state.loggedIn);
     const jwt = useSelector(state => state.jwt);
     const [toc, setToc] = useState([]);
+
     const [pageContent, setPageContent] = useState({});
     const [paragraphs, setParagraphs] = useState([]);
     const [bookName, setBookName] = useState("");
@@ -53,8 +54,22 @@ function TOCComponent(props) {
         headers: { 'Content-Type': 'application/json', 'Accept': 'application/json', 'Authorization': `Bearer ${jwt}` }
 
     }
+    const lastVisitRequestOptions = {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${jwt}` },
+        body: JSON.stringify({
+            userId: config.DEFAULT_USER_ID,
+            bookId: useSelector(state => state.page.bookId),
+            bookName: useSelector(state => state.page.bookName),
+            pageUrl: useSelector(state => state.page.pageurl),
+            chapterId: useSelector(state => state.page.currentPageNo),
+            isLastVisitedPage: "true",
+            pageNumber: useSelector(state => state.page.currentPageNo)
+        })
+    }
 
     const handleGotoPage = (bookId, bookName, pageurl, chapterid, nofChapters) => {
+
         setPageContent(
             fetch(config.BASE_PAGE_URL + bibleVersion + "/page/" + pageurl)
                 .then((response) => {
@@ -66,6 +81,12 @@ function TOCComponent(props) {
                 })
                 .then((data) => {
                     if (isLogged) {
+                        fetch(config.BOOKMARK_URL + config.DEFAULT_USER_ID, lastVisitRequestOptions)
+                            .then((response) => {
+                                return response.json()
+                            })
+                            .then((data) => { console.log("call to add last visit bookmark:" + data); });
+
                         fetch(annotationUrl + "/book/" + bookId + "/chapter/" + chapterid, getRequestOptions)
                             .then((response) => {
                                 return response.json()

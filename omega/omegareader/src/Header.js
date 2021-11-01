@@ -8,9 +8,11 @@ import BookMark from './BookMark';
 import AuthComponent from './menu-components/AuthComponent';
 import { useSelector, useDispatch } from 'react-redux';
 import "./App.scss";
-import mylogo from './mediaScriptureLogo.png';
+import mylogo from './mainlogo1.png';
 import { saveJwtAction, loggedInAction } from './actions';
-
+import Container from 'react-bootstrap/Container';
+import Row from 'react-bootstrap/Row';
+import Col from 'react-bootstrap/Col';
 
 function Header(props) {
 
@@ -29,7 +31,8 @@ function Header(props) {
   return (
 
     <Navbar bg="dark" variant="dark">
-      <img src={mylogo} alt="Media Scripture Logo" />
+
+      <img height="75" width="75" src={mylogo} alt="Media Scripture Logo" />
       <Navbar.Brand href="#home"><h2 className="">
         {props.name}
       </h2></Navbar.Brand>
@@ -45,9 +48,9 @@ function Header(props) {
         (<BookMark></BookMark>) : null
       }
       <Search></Search>
+
       <AuthComponent></AuthComponent>
     </Navbar>
-
 
   )
 

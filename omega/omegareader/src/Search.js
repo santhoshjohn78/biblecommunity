@@ -6,19 +6,24 @@ import Config from './Config';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import FormControl from 'react-bootstrap/FormControl';
-
+import { BsSearch } from "react-icons/bs";
 import { useSelector, useDispatch } from 'react-redux';
 import { gotoPageAction } from './actions';
-
+import styled from 'styled-components';
 function Search(props) {
   const config = new Config();
   const [searchText, setSearchText] = useState("");
   const [lgShow, setLgShow] = useState(false);
+  const jwt = useSelector(state => state.jwt);
   const [searchResultsTotal, setSearchResultsTotal] = useState(0);
   const [searchHits, setSearchHits] = useState([]);
   const dispatch = useDispatch();
   const bibleVersion = useSelector(state => state.version);
+  const getRequestOptions = {
+    method: 'GET',
+    headers: { 'Content-Type': 'application/json', 'Accept': 'application/json', 'Authorization': `Bearer ${jwt}` }
 
+  }
 
   const handleChange = (event) => {
     console.log(event.target.name + "=" + event.target.value);
@@ -55,20 +60,30 @@ function Search(props) {
       })
       .then((data) => {
 
-        dispatch(gotoPageAction(config.BASE_PAGE_URL + bibleVersion + "/page/" + pageurl, bookId, bookName,
+        dispatch(gotoPageAction(pageurl, bookId, bookName,
           chapterName, data, data.paragraphs, 50, chapterName));
         setLgShow(false);
       });
 
 
   }
-
+  const styles = {
+    iconStyle: {
+      paddingRight: "50%",
+      paddingTop: "5px",
+      fontSize: "50px",
+      color: "#fff"
+    }
+  }
   return (
     <div>
       <Form inline>
         <FormControl type="text" placeholder="Search Bible"
-          value={searchText} name="searchText" onChange={handleChange} className="mr-sm-2" />
-        <Button onClick={handleSubmit} variant="outline-info">Search</Button>
+          value={searchText} name="searchText" onChange={handleChange} className="mr-sm-2" >
+        </FormControl>
+        <a href="#"><span onClick={handleSubmit}><h4  > <BsSearch style={styles.iconStyle} ></BsSearch></h4></span></a>
+
+        {/* <Button onClick={handleSubmit} variant="outline-info">Search</Button> */}
       </Form>
 
       <Modal
@@ -95,7 +110,7 @@ function Search(props) {
                 </p>
               </div>
             )}
-          <h3>Total: {searchResultsTotal}</h3>
+          {/* <h3>Total: {searchResultsTotal}</h3> */}
         </Modal.Body>
       </Modal>
     </div>

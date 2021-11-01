@@ -40,7 +40,7 @@ public class AuthController {
         try {
             userService.createUser(signUpRequest);
         } catch (UserAlreadyExistsException uae) {
-            return ResponseEntity.badRequest().body(new SignupResponse("Username is already taken!"));
+            return ResponseEntity.badRequest().body(new SignupResponse("User with this email already exists!!"));
         }
         return ResponseEntity.ok().body(new SignupResponse("User successfully created..."));
     }

@@ -30,7 +30,7 @@ public class BookmarkService {
         String formattedDate = dateFormat.format(markedDate);
         bookmark.setFormattedBookMarkedDate(formattedDate);
         bookmark.setBookMarkedDate(markedDate);
-        bookmark.setIsLastVisitedPage(false);
+       // bookmark.setIsLastVisitedPage(false);
         bookmarkRepo.save(bookmark);
         return bookmark;
     }

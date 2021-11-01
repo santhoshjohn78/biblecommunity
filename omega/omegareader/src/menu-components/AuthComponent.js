@@ -4,10 +4,7 @@ import Nav from 'react-bootstrap/Nav';
 import Modal from 'react-bootstrap/Modal';
 
 import Button from 'react-bootstrap/Button';
-import Form from 'react-bootstrap/Form';
-import FormControl from 'react-bootstrap/FormControl';
-import Row from 'react-bootstrap/Row';
-import Col from 'react-bootstrap/Col';
+
 
 import { useSelector, useDispatch } from 'react-redux';
 import { saveJwtAction, loggedInAction } from '../actions';
@@ -45,7 +42,7 @@ const AppContainer = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  opacity: 1.0;
+
 `;
 
 function AuthComponent(props) {

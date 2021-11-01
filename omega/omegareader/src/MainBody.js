@@ -63,7 +63,7 @@ function MainBody(props) {
   const [annotationMediaUrl, setAnnotationMediaUrl] = useState("");
   const [annotationSharedFlag, setAnnotationSharedFlag] = useState(true);
   const jwt = useSelector(state => state.jwt);
-  const initColors = ['#B0BC00', '#FCB900', '#7BDCB5', '#00D084', '#F78DA7', '#2CCCE4'];
+  const initColors = ['#B0BC00', '#FCB900', '#7BDCB5', '#F78DA7', '#2CCCE4'];
 
   const verseRefs = useRef();
   verseRefs.current = [];
@@ -97,7 +97,11 @@ function MainBody(props) {
           return response.json()
         })
         .then((data) => {
-          const pagecontenturl = config.BASE_PAGE_URL + version + "/page/" + data.pageUrl;
+          let visitpage = config.DEFAULT_PAGE_URL;
+          if (data.pageUrl !== null) {
+            visitpage = data.pageUrl;
+          }
+          const pagecontenturl = config.BASE_PAGE_URL + version + "/page/" + visitpage;
           fetch(pagecontenturl)
             .then((response) => {
               return response.json()
@@ -334,7 +338,7 @@ function MainBody(props) {
     <BackgroundTheme>
 
 
-      <Scrollbar style={{ height: 800 }}>
+      <Scrollbar style={{ height: 700 }}>
         <Heading2><h2>{pageContent.h2}</h2> </Heading2>
 
         {
@@ -369,10 +373,10 @@ function MainBody(props) {
 
 
         }
-        <RangeSlider
+        {/* <RangeSlider
           value={sliderValue} min={minValue} max={maxValue}
           onChange={handleSliderChange}
-        />
+        /> */}
       </Scrollbar>
 
 

@@ -4,7 +4,7 @@ import Nav from 'react-bootstrap/Nav';
 import Modal from 'react-bootstrap/Modal';
 import Config from './Config';
 import { useSelector, useDispatch } from 'react-redux';
-import { BsBookmarkPlus, BsBookmarkFill, BsFillTrashFill } from "react-icons/bs";
+import { BsBookmarkPlus, BsBookmarkFill, BsSearch } from "react-icons/bs";
 
 
 function BookMark(props) {
@@ -33,6 +33,7 @@ function BookMark(props) {
       bookId: useSelector(state => state.page.bookId),
       bookName: useSelector(state => state.page.bookName),
       pageUrl: pageurl,
+      isLastVisitedPage: "false",
       chapterId: useSelector(state => state.page.currentPageNo),
       pageNumber: useSelector(state => state.page.currentPageNo)
     })
@@ -74,12 +75,14 @@ function BookMark(props) {
 
   return (
     <div>
-      <span onClick={handleOnclick}>
-        <h4>
-          {!isBookMarked && <BsBookmarkPlus style={styles.iconStyle} ></BsBookmarkPlus>}
-          {isBookMarked && <BsBookmarkFill style={styles.iconStyle} ></BsBookmarkFill>}
-        </h4>
-      </span>
+      <a href="#">
+        <span onClick={handleOnclick}>
+          <h4>
+            {!isBookMarked && <BsBookmarkPlus style={styles.iconStyle} ></BsBookmarkPlus>}
+            {isBookMarked && <BsBookmarkFill style={styles.iconStyle} ></BsBookmarkFill>}
+          </h4>
+        </span>
+      </a>
     </div>
   );
 }

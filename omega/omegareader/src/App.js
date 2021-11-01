@@ -1,4 +1,4 @@
-import React, {useState,userRef} from 'react';
+import React, { useState, userRef } from 'react';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
@@ -6,58 +6,65 @@ import { Button } from 'react-bootstrap';
 import Header from './Header';
 import ToolBarComponent from './ToolBarComponent';
 import MainBody from './MainBody';
-import Scrollbar from 'react-scrollbars-custom';
+
 import Media from './menu-components/Media';
+import styled from "styled-components";
 
-class App extends React.Component{
+class App extends React.Component {
 
-  constructor(props){
+  constructor(props) {
     super(props);
     require('dotenv').config();
   }
 
   handleOnTOCClick = () => {
-    this.setState({showTOC:!this.state.showTOC});
+    this.setState({ showTOC: !this.state.showTOC });
   }
 
-  render() {
-    return <div>
-        <Header name="">
-          {/* <ToolBarComponent id="toc" name="Table Of Contents" icon="book icon" onclickhandler={this.handleOnTOCClick}>
-          </ToolBarComponent>
-         */}
-          {/* <ToolBarComponent id="bkmk" name="bookmark" icon="bookmark icon" onclickhandler={this.handleOnTOCClick}>
 
-          </ToolBarComponent> */}
-        </Header>
-        <Container  fluid="true">
+  render() {
+    const MainAppBody = styled.body`
+    overflow: hidden; 
+    
+    `;
+    return <div>
+      <MainAppBody>
+        <Container fluid="true">
           <Row>
-          <Col sm={2}>
-            <ToolBarComponent></ToolBarComponent>
-           </Col>
-           <Col sm={7}>
-           <MainBody state={this.state}></MainBody>
-           </Col>
-           <Col sm={3}>
-                {/* <Scrollbar style={{ height: 700 }}> */}
-                <Media></Media>
-                {/* </Scrollbar> */}
-           </Col>
+            <Col md={12}>
+              <Header>
+              </Header>
+            </Col>
+          </Row>
+          <Row>
+            <Col sm={2}>
+
+              <ToolBarComponent></ToolBarComponent>
+
+            </Col>
+            <Col sm={7}>
+              <MainBody state={this.state}></MainBody>
+            </Col>
+            <Col sm={3}>
+
+              <Media></Media>
+
+            </Col>
           </Row>
         </Container>
-        
 
-        
-    </div>  
+      </MainAppBody>
+
+    </div>
   }
 }
 
 
 const Footer = (props) => {
-  const footerstyle = { border: '2px solid blue'};
-  const [ isOpen, setIsOpen ] = useState (false);
+  const footerstyle = { border: '2px solid blue' };
+  const [isOpen, setIsOpen] = useState(false);
   console.log(useState(true));
-  const handleOnclick = () =>{
+  const handleOnclick = () => {
     setIsOpen(!isOpen);
   };
 
@@ -65,8 +72,8 @@ const Footer = (props) => {
     <span onClick={handleOnclick}>
       <h5>{props.name}</h5>
     </span>
-    
-    <h3>{isOpen?props.children:null}</h3>
+
+    <h3>{isOpen ? props.children : null}</h3>
   </div>
 }
 

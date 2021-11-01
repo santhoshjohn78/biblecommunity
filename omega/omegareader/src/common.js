@@ -16,3 +16,10 @@ export const BoldLink = styled.a`
 
 `;
 
+export const ActionLink = styled.a`
+href: "#";
+color: #2f3640;
+cursor: pointer;
+`;
+
+

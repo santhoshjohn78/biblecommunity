@@ -3,8 +3,9 @@ import React, { useState, useEffect } from 'react';
 import Config from '../Config';
 import { useSelector, useDispatch } from 'react-redux';
 import Card from 'react-bootstrap/Card';
+import { ActionLink } from '../common';
 import Container from 'react-bootstrap/Container';
-import { BsFillTrashFill } from "react-icons/bs";
+import { BsFillXCircleFill } from "react-icons/bs";
 import styled from 'styled-components';
 
 import { gotoPageAction } from '../actions';
@@ -14,6 +15,7 @@ function BookMarksComponent(props) {
   const isLogged = useSelector(state => state.loggedIn);
   const fontFamilyValue = useSelector(state => state.fontFamily);
   const [bookMarksList, setBookMarksList] = useState([]);
+  const [deletedBookMark, setDeletedBookMark] = useState();
   const url = config.BOOKMARK_URL + config.DEFAULT_USER_ID;
   const jwt = useSelector(state => state.jwt);
   const dispatch = useDispatch();
@@ -25,18 +27,6 @@ function BookMarksComponent(props) {
       fontSize: "50px",
       color: "#fff"
     }
-  }
-  const requestOptions = {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      userId: config.DEFAULT_USER_ID,
-      bookId: useSelector(state => state.page.bookId),
-      bookName: useSelector(state => state.page.bookName),
-      // pageUrl: pageurl,
-      chapterId: useSelector(state => state.page.currentPageNo),
-      pageNumber: useSelector(state => state.page.currentPageNo)
-    })
   }
 
 
@@ -56,7 +46,7 @@ function BookMarksComponent(props) {
     }
 
 
-  }, [bookMarksList]);
+  }, [deletedBookMark]);
 
   const handleOnDeleteClick = (bookId) => {
     console.log("Delete bookmark " + bookId);
@@ -65,7 +55,7 @@ function BookMarksComponent(props) {
       .then(res => console.log(res.status));
 
     fetch(url, checkBookmarkRequestOption).then(res => res.json())
-      .then((data) => { setBookMarksList(data); console.log(data); });
+      .then((data) => { setBookMarksList(data); console.log(data); setDeletedBookMark(bookId); });
 
   }
 
@@ -90,22 +80,23 @@ function BookMarksComponent(props) {
         bookMarksList.map((element, i) =>
           <div key={i} style={{ paddingLeft: 50 }}>
             <Card>
-
-              <Card.Body>
-                <Card.Title>
-                  <span onClick={() => handleOnDeleteClick(element.id)}>
-                    <BsFillTrashFill></BsFillTrashFill>
-                  </span>
-                </Card.Title>
-                <span onClick={() => handleGotoPage(element.bookId, element.bookName, element.pageUrl, element.pageNumber, element.chapterId)}>
-                  <blockquote className="blockquote mb-0">
-                    <h5>{element.bookName} {element.chapterId}</h5>
-                    <footer className="blockquote-footer">
-                      {element.formatedBookMarkedDate}
-                    </footer>
-                  </blockquote>
+              <Card.Header><Card.Title>
+                <span onClick={() => handleOnDeleteClick(element.id)}>
+                  <ActionLink><BsFillXCircleFill></BsFillXCircleFill></ActionLink>
                 </span>
-              </Card.Body>
+              </Card.Title>
+
+                <ActionLink>
+                  <span onClick={() => handleGotoPage(element.bookId, element.bookName, element.pageUrl, element.pageNumber, element.chapterId)}>
+                    <blockquote className="blockquote mb-0">
+                      <h5>{element.bookName} {element.chapterId}</h5>
+                      <footer className="blockquote-footer">
+                        {element.formatedBookMarkedDate}
+                      </footer>
+                    </blockquote>
+                  </span>
+                </ActionLink>
+              </Card.Header>
             </Card>
 
           </div>

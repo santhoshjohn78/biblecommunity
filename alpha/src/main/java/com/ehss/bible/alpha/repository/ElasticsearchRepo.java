@@ -4,17 +4,12 @@ import com.ehss.bible.alpha.config.ESClient;
 import com.ehss.bible.alpha.pojo.elasticsearch.BibleMedia;
 import com.ehss.bible.alpha.pojo.elasticsearch.BibleVerse;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.lucene.search.BooleanQuery;
-import org.apache.lucene.search.Query;
 import org.elasticsearch.action.bulk.BulkRequest;
 import org.elasticsearch.action.bulk.BulkResponse;
 import org.elasticsearch.action.index.IndexRequest;
 import org.elasticsearch.action.search.SearchResponse;
-import org.elasticsearch.action.search.SearchType;
 import org.elasticsearch.action.update.UpdateRequest;
 import org.elasticsearch.client.RequestOptions;
-import org.elasticsearch.common.io.stream.StreamOutput;
-import org.elasticsearch.common.xcontent.XContentBuilder;
 import org.elasticsearch.common.xcontent.XContentType;
 import org.elasticsearch.index.query.*;
 import org.elasticsearch.script.Script;
@@ -153,6 +148,7 @@ public class ElasticsearchRepo {
         searchSourceBuilder.query(boolQuery);
         searchSourceBuilder.highlighter(new HighlightBuilder().field("*").requireFieldMatch(false)
                 .highlighterType("unified"));
+        searchSourceBuilder.sort("verseNumber");
         String[] indices ={BIBLEMEDIAINDEX};
         req = new org.elasticsearch.action.search.SearchRequest(indices, searchSourceBuilder);
 

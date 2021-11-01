@@ -4,6 +4,7 @@ import {
     BoxContainer,
     ErrorText,
     FormContainer,
+    InfoText,
     Input,
     MutedLink,
     SubmitButton,
@@ -41,12 +42,8 @@ export function SignupForm(props) {
             return response.json();
         })
             .then((data) => {
-                if (errorMessage != "") {
-                    setErrorMessage("Error creating user:" + data.message);
-                } else {
-                    setErrorMessage("");
-                    console.log("user creation successful");
-                }
+                setErrorMessage(data.message);
+
 
             });
 
@@ -85,6 +82,7 @@ export function SignupForm(props) {
             <Marginer direction="vertical" margin={10} />
             <SubmitButton type="submit" onClick={handleSubmit}>Signup</SubmitButton>
             <ErrorText>{errorMessage}</ErrorText>
+
             <Marginer direction="vertical" margin="1em" />
             <MutedLink href="#">
                 Already have an account?

@@ -40,7 +40,13 @@ export const ErrorText = styled.h5`
   margin: 0;
   margin-top: 7px;
 `;
-
+export const InfoText = styled.h5`
+  color: rgb(241, 196, 3);
+  font-weight: 500;
+  font-size: 11px;
+  margin: 0;
+  margin-top: 7px;
+`;
 export const Input = styled.input`
   width: 100%;
   height: 42px;

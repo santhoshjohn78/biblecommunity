@@ -96,7 +96,7 @@ function Themes(props) {
 
   return (
     <div>
-      <span onClick={handleOnclick}><h4  ><BsFonts style={styles.iconStyle} ></BsFonts></h4></span>
+      <a href="#"><span onClick={handleOnclick}><h4  ><BsFonts style={styles.iconStyle} ></BsFonts></h4></span></a>
 
 
       <Modal

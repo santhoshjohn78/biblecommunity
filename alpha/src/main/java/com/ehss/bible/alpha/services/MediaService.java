@@ -1,18 +1,12 @@
 package com.ehss.bible.alpha.services;
 
 import com.ehss.bible.alpha.pojo.elasticsearch.BibleMedia;
-import com.ehss.bible.alpha.pojo.elasticsearch.BibleVerse;
 import com.ehss.bible.alpha.pojo.model.Annotation;
-import com.ehss.bible.alpha.pojo.toc.Book;
-import com.ehss.bible.alpha.pojo.toc.Section;
-import com.ehss.bible.alpha.pojo.toc.VirtualTOC;
 import com.ehss.bible.alpha.repository.ElasticsearchRepo;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.codec.digest.DigestUtils;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.search.SearchHit;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -64,7 +58,8 @@ public class MediaService {
                     .chapterName(searchMap.get("chapterName").toString()).chapterNumber(Integer.parseInt(searchMap.get("chapterNumber").toString()))
                     .likeCount(Long.parseLong(searchMap.get("likeCount").toString())).dislike(Long.parseLong(searchMap.get("dislike").toString()))
                     .viewCount(Long.parseLong(searchMap.get("viewCount").toString()))
-                    //.tags(searchMap.get("tags"))
+                    .verseNumber(Integer.parseInt(searchMap.get("verseNumber").toString()))
+                    //.tags(searchMap.get("tags").toString())
                     .build();
             bibleMediaList.add(bibleMedia);
         }

@@ -1,4 +1,4 @@
-import React,{useState} from 'react';
+import React, { useState } from 'react';
 import { BsBook } from "react-icons/bs";
 
 import SideNav, { Toggle, Nav, NavItem, NavIcon, NavText } from '@trendmicro/react-sidenav';
@@ -13,65 +13,65 @@ import { BsBookmarks } from "react-icons/bs";
 
 import Scrollbar from 'react-scrollbars-custom';
 
-function ToolBarComponent(props){
+function ToolBarComponent(props) {
 
     console.log("ToolBarComponent is being rendered...");
     const { name } = props;
-    const [showTOC,setShowTOC] = useState(true);
+    const [showTOC, setShowTOC] = useState(true);
     const [showBookMarks, setShowBookMarks] = useState(false);
     const [showAnnotations, setAnnotations] = useState(false);
 
     return (
         <div>
-            <SideNav style={{backgroundColor:'#17a2b8'}}
-                    onSelect={(selected) => {
-                        // Add your code here
-                        console.log(selected);
-                        if (selected === 'toc'){
-                            if (showTOC == false){
-                                setShowTOC(true);
-                                setShowBookMarks(false);
-                                setAnnotations(false);
-                            }else{
-                                setShowTOC(false);
-                            }
+            <SideNav style={{ backgroundColor: '#17a2b8' }}
+                onSelect={(selected) => {
+                    // Add your code here
+                    console.log(selected);
+                    if (selected === 'toc') {
+                        if (showTOC == false) {
+                            setShowTOC(true);
+                            setShowBookMarks(false);
+                            setAnnotations(false);
+                        } else {
+                            setShowTOC(false);
                         }
-                        
-                        if (selected === 'bookmarks'){
-                            if (showBookMarks == false){
-                                setShowBookMarks(true);
-                                setShowTOC(false);
-                                setAnnotations(false);
-                            }else{
-                                setShowBookMarks(false);
-                            }
-                        }
+                    }
 
-                        if (selected === 'annotations'){
-                            if (showAnnotations == false){
-                                setAnnotations(true);
-                                setShowBookMarks(false);
-                                setShowTOC(false);
-                            }else{
-                                setAnnotations(false);
-
-                            }
+                    if (selected === 'bookmarks') {
+                        if (showBookMarks == false) {
+                            setShowBookMarks(true);
+                            setShowTOC(false);
+                            setAnnotations(false);
+                        } else {
+                            setShowBookMarks(false);
                         }
-                    }}
-                >
+                    }
+
+                    if (selected === 'annotations') {
+                        if (showAnnotations == false) {
+                            setAnnotations(true);
+                            setShowBookMarks(false);
+                            setShowTOC(false);
+                        } else {
+                            setAnnotations(false);
+
+                        }
+                    }
+                }}
+            >
                 <SideNav.Toggle />
                 <SideNav.Nav defaultSelected="home">
                     <NavItem eventKey="toc">
-                        <NavIcon> 
-                        <h3><BsBook></BsBook></h3>
+                        <NavIcon>
+                            <h3><BsBook></BsBook></h3>
                         </NavIcon>
                         <NavText>
                             Books
                         </NavText>
-                        
+
                     </NavItem>
-                    
-                    
+
+
                     <NavItem eventKey="bookmarks">
                         <NavIcon>
                             <h3><BsBookmarks></BsBookmarks></h3>
@@ -79,8 +79,8 @@ function ToolBarComponent(props){
                         <NavText>
                             Book Marks
                         </NavText>
-                        
-                        
+
+
                     </NavItem>
                     <NavItem eventKey="annotations">
                         <NavIcon>
@@ -89,20 +89,20 @@ function ToolBarComponent(props){
                         <NavText>
                             Notes and Annotations
                         </NavText>
-                        
-                        
+
+
                     </NavItem>
-                    
+
                 </SideNav.Nav>
             </SideNav>
-            <Scrollbar style={{ height: 800 }}>
-            {showTOC &&  <TOCComponent></TOCComponent>}
-            {showBookMarks &&  <BookMarksComponent></BookMarksComponent>}
-            {showAnnotations && <AnnotationListComponent></AnnotationListComponent>}
+            <Scrollbar style={{ height: 700 }}>
+                {showTOC && <TOCComponent></TOCComponent>}
+                {showBookMarks && <BookMarksComponent></BookMarksComponent>}
+                {showAnnotations && <AnnotationListComponent></AnnotationListComponent>}
             </Scrollbar>
-          </div>
+        </div>
     );
-  
+
 
 }
 
