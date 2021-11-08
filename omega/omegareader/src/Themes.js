@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
-import Navbar from 'react-bootstrap/Navbar';
-import Nav from 'react-bootstrap/Nav';
+
 import Modal from 'react-bootstrap/Modal';
 import ButtonGroup from 'react-bootstrap/ButtonGroup'
 import ToggleButton from 'react-bootstrap/ToggleButton';
@@ -14,7 +13,6 @@ import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import ListGroup from 'react-bootstrap/ListGroup';
-// import ListGroupItem from 'react-bootstrap/ListGroupItem';
 import { changeFontSizeAction, changeFontFamilyAction, changeThemeColorAction, changeVersionAction } from './actions';
 import { useSelector, useDispatch } from 'react-redux';
 
@@ -50,7 +48,7 @@ function Themes(props) {
 
   const handleSliderChange = (e) => {
 
-    console.log("-------fontsize----------" + e.target.value);
+
     const fontsize = e.target.value;
 
     dispatch(changeFontSizeAction(fontsize));

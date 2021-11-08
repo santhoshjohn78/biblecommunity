@@ -1,9 +1,9 @@
 
-import ParentConfig from './ParentConfig';
 
 class Config {
 
 
+    // replace http://localhost:8080 with https://mediascripture.com
 
     SAMPLE2_PAGE_URL = "http://localhost:8080" + "/kjv/OEBPS/66.RE.21.xhtml";
 

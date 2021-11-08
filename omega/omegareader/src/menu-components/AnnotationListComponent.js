@@ -50,7 +50,7 @@ function AnnotationListComponent(props) {
   useEffect(() => {
     if (isLogged) {
       fetch(url, getAnnotationRequestOption).then(res => res.json())
-        .then((data) => { setAnnotationList(data); console.log(data); });
+        .then((data) => { setAnnotationList(data); });
     }
 
   }, [deletedAnnotation]);
@@ -62,7 +62,7 @@ function AnnotationListComponent(props) {
       .then(res => console.log(res.status));
 
     fetch(url, getAnnotationRequestOption).then(res => res.json())
-      .then((data) => { setAnnotationList(data); console.log(data); setDeletedAnnotation(annotationId); });
+      .then((data) => { setAnnotationList(data); setDeletedAnnotation(annotationId); });
 
   }
 

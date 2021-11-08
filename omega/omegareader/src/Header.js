@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import Navbar from 'react-bootstrap/Navbar';
 import Nav from 'react-bootstrap/Nav';
-import Button from 'react-bootstrap/Button';
 import Search from './Search';
 import Themes from './Themes';
 import BookMark from './BookMark';
@@ -10,9 +9,6 @@ import { useSelector, useDispatch } from 'react-redux';
 import "./App.scss";
 import mylogo from './mainlogo1.png';
 import { saveJwtAction, loggedInAction } from './actions';
-import Container from 'react-bootstrap/Container';
-import Row from 'react-bootstrap/Row';
-import Col from 'react-bootstrap/Col';
 
 function Header(props) {
 

@@ -1,10 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import Navbar from 'react-bootstrap/Navbar';
-import Nav from 'react-bootstrap/Nav';
-import Modal from 'react-bootstrap/Modal';
+
 import Config from './Config';
-import { useSelector, useDispatch } from 'react-redux';
-import { BsBookmarkPlus, BsBookmarkFill, BsSearch } from "react-icons/bs";
+import { useSelector } from 'react-redux';
+import { BsBookmarkPlus, BsBookmarkFill } from "react-icons/bs";
 
 
 function BookMark(props) {
@@ -46,7 +44,7 @@ function BookMark(props) {
 
   useEffect(() => {
     if (isLogged) {
-      console.log("Inside render of Bookmark check if page " + pageurl + " is bookmarked");
+
       fetch(config.BOOKMARK_URL + config.DEFAULT_USER_ID + "/page/" + pageurl, checkBookmarkRequestOption)
         .then((response) => {
           if (response.status === 200)

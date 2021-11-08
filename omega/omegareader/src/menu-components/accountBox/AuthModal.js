@@ -1,14 +1,7 @@
-import React, { useState, useContext } from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
-import Form from 'react-bootstrap/Form';
-import InputGroup from 'react-bootstrap/InputGroup';
-import FormControl from 'react-bootstrap/FormControl';
-import Row from 'react-bootstrap/Row';
-import Col from 'react-bootstrap/Col';
 import { motion } from "framer-motion";
-import Button from 'react-bootstrap/Button';
 import { Marginer } from "./marginer";
-import { AccountContext } from "./accountContext";
 
 const AuthContainer = styled.div`
 position: fixed;
@@ -161,69 +154,69 @@ export const SubmitButton = styled.button`
 
 export const AuthModal = ({ showAuthModal, setShowAuthModal }) => {
 
-    const [isExpanded, setExpanded] = useState(false);
-    const [active, setActive] = useState("signin");
-    const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
-    const [confirmPassword, setConfirmPassword] = useState("");
-    //const { currentContext } = useContext(AccountContext);
+  const [isExpanded, setExpanded] = useState(false);
+  const [active, setActive] = useState("signin");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  //const { currentContext } = useContext(AccountContext);
 
 
 
-    const switchToSignup = () => {
-        // playExpandingAnimation();
-        setTimeout(() => {
-            setActive("signup");
-        }, 400);
-    };
+  const switchToSignup = () => {
+    // playExpandingAnimation();
+    setTimeout(() => {
+      setActive("signup");
+    }, 400);
+  };
 
-    const switchToSignin = () => {
-        //  playExpandingAnimation();
-        setTimeout(() => {
-            setActive("signin");
-        }, 400);
-    };
+  const switchToSignin = () => {
+    //  playExpandingAnimation();
+    setTimeout(() => {
+      setActive("signin");
+    }, 400);
+  };
 
-    const contextValue = { switchToSignup, switchToSignin };
-    return (
-        <>
-            {showAuthModal ?
-                <AuthContainer>
-                    <BoxContainer>
-                        <TopContainer>
-                            <BackDrop >
-                            </BackDrop>
-                            <HeaderContainer>
-                                <HeaderText>Welcome</HeaderText>
-                                <HeaderText>Back</HeaderText>
-                                <SmallText>Please sign-in to continue!</SmallText>
-                            </HeaderContainer>
+  const contextValue = { switchToSignup, switchToSignin };
+  return (
+    <>
+      {showAuthModal ?
+        <AuthContainer>
+          <BoxContainer>
+            <TopContainer>
+              <BackDrop >
+              </BackDrop>
+              <HeaderContainer>
+                <HeaderText>Welcome</HeaderText>
+                <HeaderText>Back</HeaderText>
+                <SmallText>Please sign-in to continue!</SmallText>
+              </HeaderContainer>
 
-                        </TopContainer>
-                        <InnerContainer>
-                            <BoxContainer>
-                                <FormContainer>
-                                    <Input type="text" placeholder="Full Name" />
-                                    <Input type="email" placeholder="Email" />
-                                    <Input type="password" placeholder="Password" />
-                                    <Input type="password" placeholder="Confirm Password" />
-                                </FormContainer>
-                                <Marginer direction="vertical" margin={10} />
-                                <SubmitButton type="submit">Signup</SubmitButton>
-                                <Marginer direction="vertical" margin="1em" />
-                                <MutedLink href="#">
-                                    Already have an account?
-                                    <BoldLink href="#" onClick={switchToSignup}>
-                                        Signin
-                                    </BoldLink>
-                                </MutedLink>
-                            </BoxContainer>
-                        </InnerContainer>
-                    </BoxContainer>
-                </AuthContainer>
+            </TopContainer>
+            <InnerContainer>
+              <BoxContainer>
+                <FormContainer>
+                  <Input type="text" placeholder="Full Name" />
+                  <Input type="email" placeholder="Email" />
+                  <Input type="password" placeholder="Password" />
+                  <Input type="password" placeholder="Confirm Password" />
+                </FormContainer>
+                <Marginer direction="vertical" margin={10} />
+                <SubmitButton type="submit">Signup</SubmitButton>
+                <Marginer direction="vertical" margin="1em" />
+                <MutedLink href="#">
+                  Already have an account?
+                  <BoldLink href="#" onClick={switchToSignup}>
+                    Signin
+                  </BoldLink>
+                </MutedLink>
+              </BoxContainer>
+            </InnerContainer>
+          </BoxContainer>
+        </AuthContainer>
 
-                : null
-            }
-        </>
-    );
+        : null
+      }
+    </>
+  );
 }

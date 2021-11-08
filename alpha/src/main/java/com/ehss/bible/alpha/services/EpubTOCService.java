@@ -1,18 +1,16 @@
 package com.ehss.bible.alpha.services;
 
-import com.ehss.bible.alpha.pojo.epub.*;
 import com.ehss.bible.alpha.pojo.RootTOC;
+import com.ehss.bible.alpha.pojo.epub.*;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
-import javax.xml.namespace.QName;
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamConstants;
 import javax.xml.stream.XMLStreamReader;
-import java.io.FileInputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,8 +30,7 @@ public class EpubTOCService {
         XMLInputFactory xmlif = XMLInputFactory.newInstance();
         String toc=versionService.getTocpath().get(version);
         log.info("TOC path="+toc);
-        XMLStreamReader xmlStreamReader = xmlif.createXMLStreamReader(new FileInputStream(getClass().getClassLoader()
-                .getResource(toc).getFile()));
+        XMLStreamReader xmlStreamReader = xmlif.createXMLStreamReader(getClass().getResourceAsStream("/" + toc));
         Ncx ncx = xmlMapper.readValue(xmlStreamReader, Ncx.class);
 
         return new RootTOC(ncx);
@@ -43,36 +40,35 @@ public class EpubTOCService {
     public ChapterHtml getChapterToc(String version,String chapterId) throws Exception {
         XmlMapper xmlMapper = new XmlMapper();
         XMLInputFactory xmlif = XMLInputFactory.newInstance();
-        XMLStreamReader xmlStreamReader = xmlif.createXMLStreamReader(new FileInputStream(getClass().getClassLoader().getResource("static/"+version+"/OEBPS/"+chapterId).getFile()));
+        XMLStreamReader xmlStreamReader = xmlif.createXMLStreamReader(getClass().getResourceAsStream("/static/" + version + "/OEBPS/" + chapterId));
         ChapterHtml chapterHtml = xmlMapper.readValue(xmlStreamReader, ChapterHtml.class);
         return chapterHtml;
     }
 
-    public PageHtml getPage(String version,String pageUrl) throws  Exception{
+    public PageHtml getPage(String version, String pageUrl) throws Exception {
         XmlMapper xmlMapper = new XmlMapper();
         XMLInputFactory xmlif = XMLInputFactory.newInstance();
-        XMLStreamReader xmlStreamReader = xmlif.createXMLStreamReader(new FileInputStream(getClass().getClassLoader().getResource("static/"+version+"/OEBPS/"+pageUrl).getFile()));
-        PageHtml pageHtml= new PageHtml();
+        XMLStreamReader xmlStreamReader = xmlif.createXMLStreamReader(getClass().getResourceAsStream("/static/" + version + "/OEBPS/" + pageUrl));
+        PageHtml pageHtml = new PageHtml();
         pageHtml.setBody(new PageBody());
         pageHtml.getBody().setParagraphs(new ArrayList<>());
         //Iterate through events.
-        Paragraph paragraph=null;
+        Paragraph paragraph = null;
         List<Span> spans;
         String verseText;
         Span span = null;
-        while(xmlStreamReader.hasNext()){
+        while (xmlStreamReader.hasNext()) {
 
             //Get integer value of current event.
             int xmlEvent = xmlStreamReader.getEventType();
 
 
-
-            if (paragraph!=null && xmlEvent == XMLStreamConstants.CHARACTERS){
+            if (paragraph != null && xmlEvent == XMLStreamConstants.CHARACTERS) {
                 verseText = xmlStreamReader.getText();
                 if (!verseText.startsWith("\n"))
-                    if (span.getVerseText()!=null) {
+                    if (span.getVerseText() != null) {
                         span.setVerseText(span.getVerseText() + " " + verseText);
-                    }else{
+                    } else {
                         span.setVerseText(verseText);
                     }
             }

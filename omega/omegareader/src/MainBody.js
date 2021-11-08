@@ -6,14 +6,10 @@ import Form from 'react-bootstrap/Form';
 import InputGroup from 'react-bootstrap/InputGroup';
 import Config from './Config';
 import { Button } from 'react-bootstrap';
-import RangeSlider from 'react-bootstrap-range-slider';
 import Modal from 'react-bootstrap/Modal';
 
-import { CirclePicker, TwitterPicker, SwatchesPicker } from 'react-color';
-import {
-  BoldLink,
-  MutedLink
-} from "./common";
+import { CirclePicker } from 'react-color';
+
 
 import { useSelector, useDispatch } from 'react-redux';
 import Scrollbar from 'react-scrollbars-custom';
@@ -86,7 +82,7 @@ function MainBody(props) {
 
   useEffect(() => {
 
-    console.log("getting content for version:" + bibleVersion);
+
     setSelectedversenum(1);
     const version = bibleVersion;
     if (isLogged) {
@@ -166,7 +162,7 @@ function MainBody(props) {
             return response.json()
           })
           .then((data1) => {
-            console.log(data.paragraphs);
+
             var colorMap = new Map();
             for (let k = 0; k < data1.length; k++) {
               colorMap.set("" + data1[k].verseNumber, data1[k].highlightColor);
@@ -229,8 +225,8 @@ function MainBody(props) {
     const chapid = e.target.value;
 
     fetch(config.QUERY_PAGE_URL + bookid + "/chapter/" + e.target.value)
-      .then((response) => { console.log(response); return response.json() })
-      .then((data) => { console.log(data.url); console.log(chapid + "+++++" + e.target.value); fetchPageContent(data.url, chapid); });
+      .then((response) => { return response.json() })
+      .then((data) => { fetchPageContent(data.url, chapid); });
   }
 
   const handleChangeColor = (color) => {

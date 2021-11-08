@@ -39,7 +39,7 @@ function BookMarksComponent(props) {
     headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${jwt}` }
   }
   useEffect(() => {
-    console.log("list bookmarks....");
+
     if (isLogged) {
       fetch(url, checkBookmarkRequestOption).then(res => res.json())
         .then((data) => { setBookMarksList(data); });
@@ -49,13 +49,13 @@ function BookMarksComponent(props) {
   }, [deletedBookMark]);
 
   const handleOnDeleteClick = (bookId) => {
-    console.log("Delete bookmark " + bookId);
+
 
     fetch(url + "/" + bookId, deleteBookmarkRequestOption)
       .then(res => console.log(res.status));
 
     fetch(url, checkBookmarkRequestOption).then(res => res.json())
-      .then((data) => { setBookMarksList(data); console.log(data); setDeletedBookMark(bookId); });
+      .then((data) => { setBookMarksList(data); setDeletedBookMark(bookId); });
 
   }
 

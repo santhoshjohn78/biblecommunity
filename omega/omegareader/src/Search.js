@@ -1,15 +1,13 @@
 import React, { useState } from 'react';
-import Navbar from 'react-bootstrap/Navbar';
-import Nav from 'react-bootstrap/Nav';
+
 import Modal from 'react-bootstrap/Modal';
 import Config from './Config';
-import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import FormControl from 'react-bootstrap/FormControl';
 import { BsSearch } from "react-icons/bs";
 import { useSelector, useDispatch } from 'react-redux';
 import { gotoPageAction } from './actions';
-import styled from 'styled-components';
+
 function Search(props) {
   const config = new Config();
   const [searchText, setSearchText] = useState("");
@@ -26,7 +24,7 @@ function Search(props) {
   }
 
   const handleChange = (event) => {
-    console.log(event.target.name + "=" + event.target.value);
+
     setSearchText(event.target.value);
   }
 

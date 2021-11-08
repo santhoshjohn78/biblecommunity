@@ -55,18 +55,18 @@ function Media(props) {
   }, [bookid, chapterNumber, liked, disLiked]);
 
   const handleOnLike = (id) => {
-    console.log("call to like video " + id);
+
 
     fetch(updateUrl + "/like/" + id + "/test", putLikeMediaRequestOption)
-      .then(res => { console.log(res.status); setLiked(liked + 1); });
+      .then(res => { setLiked(liked + 1); });
 
   }
 
   const handleOnDisLike = (id) => {
-    console.log("call to dislike video " + id);
+
 
     fetch(updateUrl + "/dislike/" + id + "/test", putLikeMediaRequestOption)
-      .then(res => { console.log(res.status); setDisLiked(disLiked + 1); });
+      .then(res => { setDisLiked(disLiked + 1); });
 
   }
 

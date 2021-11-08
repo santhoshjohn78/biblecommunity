@@ -1,5 +1,4 @@
 import React from 'react';
-import useState from 'react';
 import ReactDOM from 'react-dom';
 
 import './App.scss';
@@ -10,14 +9,14 @@ import App from './App';
 import rootReducer from './reducers'
 import reportWebVitals from './reportWebVitals';
 import { createStore } from 'redux';
-import {Provider} from 'react-redux';
+import { Provider } from 'react-redux';
 
-const store = createStore(rootReducer,window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__());
+const store = createStore(rootReducer, window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__());
 
 ReactDOM.render(
   <Provider store={store}>
     <App />
-    </Provider> ,
+  </Provider>,
   document.getElementById('root')
 );
 

@@ -1,8 +1,7 @@
-import React, { useState, userRef } from 'react';
+import React, { useState } from 'react';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
-import { Button } from 'react-bootstrap';
 import Header from './Header';
 import ToolBarComponent from './ToolBarComponent';
 import MainBody from './MainBody';
@@ -63,7 +62,7 @@ class App extends React.Component {
 const Footer = (props) => {
   const footerstyle = { border: '2px solid blue' };
   const [isOpen, setIsOpen] = useState(false);
-  console.log(useState(true));
+
   const handleOnclick = () => {
     setIsOpen(!isOpen);
   };
