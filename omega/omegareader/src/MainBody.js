@@ -185,9 +185,11 @@ function MainBody(props) {
   }
 
   const handleOnVerseClick = (verseId, verseName) => {
-    setSelectedversenum(verseId);
-    setSelectedverse(verseName);
-    setShowPopup(true);
+    if (isLogged) {
+      setSelectedversenum(verseId);
+      setSelectedverse(verseName);
+      setShowPopup(true);
+    }
   }
 
   const requestOptions = {
